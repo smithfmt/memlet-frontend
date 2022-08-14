@@ -596,9 +596,9 @@ a:-webkit-any-link {
 }
 
 .learncard.results {
-  position: absolute;
-  width: auto;
-  top: 10%
+  position: fixed;
+  top: 20%;
+  padding: 3vw;
 }
 .results-card {
   display: flex;
@@ -606,6 +606,9 @@ a:-webkit-any-link {
   font-size: 1.5rem;
   text-align: center;
   margin-bottom: 1rem;
+}
+.results-card div {
+  margin: 1vw;
 }
 
 .results-button {

@@ -2,18 +2,18 @@ import React from "react";
 import { BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import './App.css';
 
-import NotFound from "./components/NotFound";
-import Signup from "./components/Signup";
-import Dashboard from "./components/Dashboard";
-import Create from "./components/Create";
-import Play from "./components/Play";
-import View from "./components/View";
-import Stats from "./components/Stats";
-import Flashcards from "./components/Flashcards";
-import Learn from "./components/Learn";
-import Profile from "./components/Profile";
-import Explore from "./components/Explore";
-import Folder from "./components/Folder";
+import NotFound from "./components/pages/NotFound";
+import Signup from "./components/pages/Signup";
+import Dashboard from "./components/pages/Dashboard";
+import Create from "./components/pages/Create";
+import Play from "./components/pages/Play";
+import View from "./components/pages/View";
+import Stats from "./components/pages/Stats";
+import Flashcards from "./components/pages/Flashcards";
+import Learn from "./components/pages/Learn";
+import Profile from "./components/pages/Profile";
+import Explore from "./components/pages/Explore";
+import Folder from "./components/pages/Folder";
 
 const App = () => {
   return (
