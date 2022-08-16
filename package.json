@@ -52,6 +52,5 @@
   "repository": {
     "type": "git",
     "url": "git+https://freddiesmith@bitbucket.org/sentium-consulting/intern-big-data-frontend.git"
-  },
-  "homepage": "https://memlet-frontend.vercel.app/dashboard"
+  }
 }
