@@ -1,5 +1,5 @@
 {
-  "name": "intern-big-data-frontend",
+  "name": "memlet-frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -53,5 +53,5 @@
     "type": "git",
     "url": "git+https://freddiesmith@bitbucket.org/sentium-consulting/intern-big-data-frontend.git"
   },
-  "homepage": "/dashboard"
+  "homepage": "https://memlet-frontend.vercel.app/dashboard"
 }
