@@ -57,7 +57,9 @@ const View = (props) => {
                 let labelArray = [];
                 answerArray.sort((prev, next) => {return prev.id - next.id}).forEach(answer => {
                     dataArray = [...dataArray, (dataArray[dataArray.length-1] || 0) + (answer.correct_percentage===100 ? 1 : answer.correct_percentage/100 -1)];
-                    labelArray = [...labelArray, `${answer.answer}-${answer.correct_answer}`];
+                    let nextLabel = `${answer.answer}-${answer.correct_answer}`;
+                if (nextLabel.length>15) nextLabel = `${nextLabel.slice(0,15)}...`;
+                labelArray.push(nextLabel);
                 });
                 if (dataArray.length===0) {
                     dataArray = "No Data";

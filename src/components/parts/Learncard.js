@@ -49,13 +49,14 @@ const Learncard = (props) => {
     const handleAnswer = (e) => {
         e.preventDefault();
         const clientResult = compare(answerRef.current.value, correctAnswer);
+        console.log("client",clientResult)
         const charArray = clientResult[0];
         setCorrPercent(clientResult[1]);
         let key = 0;
         answerDisplay = charArray.map((obj) => {
             key++;
             return (
-                <p className={obj.correct} key={`${obj.char}${key}`}>{obj.char}</p>
+                <p className={`${obj.correct} answer-char`} key={`${obj.char}${key}`}>{obj.char}</p>
             );
         });
         setAnswered(answerDisplay);
@@ -66,6 +67,7 @@ const Learncard = (props) => {
         })
         .then(res => {
             const { result } = res.data;
+            console.log("server",result)
             if (result[1] !== clientResult[1]) {
                 const charArray = result[0];
                 setCorrPercent(result[1]);
@@ -91,8 +93,8 @@ const Learncard = (props) => {
         if (corrPercent<100) {answerMessage = "almost"};
         if (corrPercent<65) {answerMessage = "incorrect"};
         return (
-            <div className="learncard-container">
-                <div id={id} className={`learncard answer ${position}`} >
+            <div className={`learncard-container ${position}`}>
+                <div id={id} className={`learncard answer`} >
                     <div className="answercard-container">
                         <h2 className={`${answerMessage} answercard-message`}>{`${capitalize(answerMessage)}!`}</h2>
                         <div className="answer-container">
@@ -106,8 +108,8 @@ const Learncard = (props) => {
     };
 
     return (
-        <div className="learncard-container">
-            <div id={id} className={`learncard ${position}`} >
+        <div className={`learncard-container ${position}`}>
+            <div id={id} className={`learncard`} >
                 <form className="answer-form" onSubmit={handleAnswer}>
                 {display} = 
                 <input autoComplete="off" spellCheck="false" id={`learncard-input-${id}`} type="text" name="answer" required ref={answerRef} placeholder="Translation" autoFocus="autofocus" />

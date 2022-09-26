@@ -44,18 +44,18 @@ const Header = (props) => {
             {buttons.map(button => {
                 return (
                     <Link className="header-button-container" to={`/${button}`} replace key={button}>
-                    <button className={`header-button ${button}`}>
+                    <div className={`header-button ${button}`}>
                         <img src={images[`${button}.png`].default} alt={button} />
-                    </button>
+                    </div>
                     <div className="header-button-info">
                         {capitalize(button)}
                     </div>
                     </Link>
             )})}
             <Link key="profile" className="profile-button-container" to="/profile" replace>
-            <button className="profile-button">
+            <div className="profile-button">
                 <img src={user.avatar && user.avatar!=="none" ? avatars[`${user.avatar}.png`].default : images["profile.png"].default} alt="profile" />
-            </button>
+            </div>
             <div className="header-button-info">
                 Profile
             </div>

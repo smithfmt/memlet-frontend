@@ -1,0 +1,9 @@
+
+.avatar-container {
+  height: 2rem;
+  width: auto;
+  margin-left: auto;
+  border-radius: 50%;
+  border: solid 2px rgba(0, 0, 0, 0.103);
+  padding: 0.2rem
+}

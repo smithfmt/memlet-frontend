@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './css/index.css';
 import axios from "axios";
 import App from './App';
 import reportWebVitals from './reportWebVitals';

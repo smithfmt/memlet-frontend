@@ -21,7 +21,7 @@ const Play = (props) => {
                         Simple flashcards for speedy learning
                     </div>
                     <div className="img-container">
-                        <img alt="flashcards" src={Flashcards} />
+                        <img alt="flashcards-icon" src={Flashcards} />
                     </div>
                 </Link>
                 </div>

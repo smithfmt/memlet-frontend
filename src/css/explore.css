@@ -1,0 +1,184 @@
+
+.explore-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .explore-card {
+    padding: 1rem;
+    width: 25rem;
+    margin: 1rem;
+    height: 15rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    border-radius: 8px;
+    background-color: white;
+    border: transparent solid;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  .explore-card div {
+    margin-bottom: 0.5rem;
+  }
+  
+  .explore-container-details {
+    position: relative;
+    display: flex;
+    align-items: initial;
+    width: 92%;
+    margin-right: 3.5rem;
+    top: 1.5rem;
+  }
+  
+  .explore-container-details h2 {
+    position: relative;
+    bottom: 0.5rem;
+    font-size: 1rem;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  }
+  
+  .sortBy-filters {
+    display: flex;
+    margin-left: auto;
+    margin-right: 1rem;
+    color: #3a3a3a;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  }
+  
+  .sortBy-dropdown {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sortBy-dropdown-selected {
+    display: flex;
+    justify-content: center;
+    border: rgba(0, 0, 0, 0.507) solid 1px;
+    font-size: 0.6rem;
+    border-radius: 8px;
+    padding: 0.5rem;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    transition: 0.2s;
+    width: 4rem;
+    margin-top: 0.2rem;
+  }
+  
+  .sortBy-dropdown:hover .sortBy-dropdown-selected {
+    border-bottom-left-radius: 0%;
+    border-bottom-right-radius: 0%;
+  }
+  
+  .sortBy-dropdown-menu {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+    width: 100%;
+    opacity: 0;
+  }
+  .sortBy-dropdown:hover .sortBy-dropdown-menu {
+    animation: growDown 300ms ease-in-out forwards;
+    transform-origin: top center;
+    opacity: 1;
+    pointer-events: all;
+  }
+  
+  .sortBy-dropdown-menu button {
+    cursor: pointer;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    border: rgba(0, 0, 0, 0.507) solid 1px;
+    color: #3a3a3a;
+    font-size: 0.6rem;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  }
+  .sortBy-dropdown-menu button.top {
+    margin-top: 1.4rem;
+  } 
+  
+  .sortBy-dropdown-menu button:active {
+    background-color: rgb(0, 0, 0);
+  }
+  
+  .sortBy-dropdown-menu button:hover {
+    background-color: rgb(230, 227, 227);
+  }
+  .sortBy-dropdown-menu button:active {
+    background-color: rgb(175, 175, 175);
+  }
+  
+  .sortBy-label {
+    margin-right: 0.6rem;
+    font-size: 0.5rem;
+    margin-top: 0.5rem;
+    margin-left: 0.6rem;
+  }
+  
+  .bottom-button {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+  
+  .sortBy-dropdown-menu button.selected {
+    border: #080808dc solid 1px;
+    background-color: rgb(240, 178, 178);
+  }
+  .sortBy-dropdown-menu button.selected:hover {
+    background-color: rgb(240, 178, 178);
+  }
+  
+  
+.exploreList-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+  } 
+  .exploreList-buttons h2 {
+    font-size: 2rem;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: rgba(0, 0, 0, 0.829);
+  }
+  .exploreList-buttons a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0%;
+    left: 0%;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: rgba(0, 0, 0, 0.76);
+    font-size: 1rem;
+  }
+  .exploreList-buttons .upvote-button {
+    width: 5rem;
+  }
+  
+  .upvote-button {
+    display: flex;
+    width: 5rem;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .upvote-image {
+    height: 60%;
+    width: 60%;
+    object-fit: cover;
+  }
+  
+  .copy-button {
+    position: relative;
+    width: 5rem;
+  }
+  

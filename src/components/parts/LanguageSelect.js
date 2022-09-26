@@ -1,7 +1,7 @@
 import React from "react";
 import { capitalize } from "../../helpers";
 
-const langList = ["english", "french", "spanish", "italian", "latin"];
+const langList = ["english", "latin", "greek", "french", "spanish", "italian",];
 
 const LanguageSelect = (props) => {
     const {langs, updateTitle} = props;

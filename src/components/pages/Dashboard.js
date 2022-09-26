@@ -115,7 +115,9 @@ const Dashboard = () => {
     }, [prevSortBy, prevFolderSortBy, user, dashboardFilters]);
 
     const userLabels = stats.answers.map(ans => {
-        return `${ans.answer} - ${ans.correct_answer}`;
+        let label = `${ans.answer} - ${ans.correct_answer}`;
+        if (label.length>15) label = `${label.slice(0,15)}...`;
+        return label;
     });
     let userData = [];
     const roundToTwo = (num) => {

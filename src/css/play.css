@@ -1,0 +1,354 @@
+
+.play-page.section {
+    background-color: white;
+    border: transparent solid;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    height: 20rem;
+    box-sizing: border-box;
+    padding: 0.5rem;
+    padding-bottom: 1rem;
+    position: relative;
+    border-bottom: white 10px solid;
+    text-align: center;
+  }
+  .play-page.section:hover {
+    border-bottom: rgb(211, 92, 92) 10px solid;
+  }
+  .play-page.section:hover .section-title {
+    box-sizing: border-box;
+    border-image: linear-gradient(to right, rgb(85, 83, 83), rgba(95, 95, 95, 0.048)) 100% 1;
+    border-width: 0.2rem;
+    border-style: solid;
+    transition: 0.2s;
+  }
+  .play-page a {
+    height: 100%;
+    width: 100%;
+    color: #2c2c2cd8;
+  }
+  
+  .play.section .play-button {
+    position: relative;
+    width: 13rem;
+    height: 4rem;
+  }
+  .play-button-link {
+    display: flex;
+    align-items: center;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    box-sizing: border-box;
+    width: 100%;
+  }
+  .play.section .play-button:hover {
+    display: flex;
+  }
+  .play-button-link img {
+    width: auto;
+    height: 2.5rem;
+    margin-left: auto;
+  }
+  .play-button-link div {
+    margin-right: auto;
+    text-align: left;
+  }
+
+  
+.flashcards-page-container { 
+    overflow: hidden;
+    opacity: 1;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+    position: relative;
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .flashcard-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    transition: 0.3s;
+  }
+  
+  .flashcard {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    user-select: none;
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 35rem;
+    height: 25rem;
+    perspective: 1000px;
+    cursor: pointer;
+    margin-right: 1rem;
+    margin-left: 1rem;
+    font-size: 2.5rem;  
+    padding: 3rem;
+  }
+  .flashcard-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    transition: transform 0.5s;
+    transform-style: preserve-3d;
+    background-color: white;
+    box-shadow: 0 0.4rem 0.8rem 0 rgba(0, 0, 0, 0.2), 0 0.6rem 2rem 0 rgba(0, 0, 0, 0.19);
+    color: rgba(0, 0, 0, 0.685);
+  }
+  .flashcard-inner.flip-back {
+    transform: rotateX(180deg);
+  }
+
+  .hide {
+    color: white;
+  }
+  
+  .flashcard-front {
+    position: absolute;
+    opacity: 1;
+  }
+  .flashcard-front.back {
+    opacity: 0;
+    transition: opacity 0.1;
+  }
+  .flashcard-back {
+    position: absolute;
+    transform: rotateX(180deg);
+    opacity: 1;
+  }
+  .flashcard-back.front {
+    opacity: 0;
+    transition: opacity 0.1s;
+  }
+  .flashcard.current {
+    position: relative;
+    opacity: 1;
+    pointer-events: all;
+  }
+  .flashcard.prev {
+    width: 28rem;
+    height: 20rem;
+    position: relative;
+    opacity: 50%;
+  }
+  .flashcard.next {
+    width: 28rem;
+    height: 20rem;
+    position: relative;
+    opacity: 50%;
+  }
+  .flashcard.prev-prev {
+    position: relative;
+    opacity: 0;
+  }
+  .flashcard.next-next {
+    position: relative;
+    opacity: 0;
+  }
+  
+  .flashcard-nav {
+    display: flex;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .flashcard-nav button {
+    margin-left: 3rem;
+    margin-right: 3rem;
+    width: 4rem;
+    height: 4rem;
+    font-size: 1.5rem;
+  }
+  
+.flashcards-number {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 1.5rem;
+    color: rgba(0, 0, 0, 0.699);
+  }
+
+  
+.learncard-container {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .learncard.answer {
+    min-width: 15rem;
+  }
+  
+  .learncard {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    padding: 1rem;
+    font-size: 2rem;
+    border: rgba(61, 60, 60, 0.404) solid 0.2rem;
+    border-radius: 0.8rem;
+    background-color: white;
+    box-shadow: 0 0.4rem 0.8rem 0 rgba(0, 0, 0, 0.2), 0 0.6rem 2rem 0 rgba(0, 0, 0, 0.19);
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  }
+  
+  .learncard input {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: rgba(0, 0, 0, 0.685);
+    background-color: white;
+    border: none;
+    border-bottom: rgb(161, 161, 161) 2px solid;
+    border-top: rgb(255, 255, 255) 2px solid;
+    font-size: 1.5rem;
+  }
+  
+  .learncard input:focus {
+    color: black;
+    outline: none;
+    border: none;
+    border-bottom: rgb(211, 92, 92) 2px solid;
+    border-top: rgb(255, 255, 255) 2px solid;
+  }
+  
+  .learncard-container.current {
+    opacity: 1;
+    pointer-events: all;
+    position: relative;
+  }
+  
+  .answercard-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .answercard-message {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    position: relative;
+    margin-top: 0%;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+  }
+  
+  .answer-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .answer-form input {
+    height: 2rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  
+  .answer-form button {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1rem;
+  }
+  
+  .learn-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60rem;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding: 5rem;
+    height: 30rem;
+    margin-top: 2rem;
+    overflow: hidden;
+  }
+  
+  .correct {
+    color: rgb(113, 185, 6);
+  }
+  .incorrect {
+    color: red;
+  }
+  .almost {
+    color: rgb(255, 166, 0);
+  }
+  
+  .answer-message {
+    margin: 0;
+    height: 2rem;
+  }
+  
+  .correct-answer-divider {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .answer-container {
+    position: relative;
+    display: flex;
+  }
+  .answer-container p {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 1.5rem;
+    margin: 0;
+  }
+  
+  .answercard-container .slide-button {
+    margin-top: 1rem;
+    height: 2rem;
+    width: 3rem;
+  }
+  
+  .learn-progress-bar-outer {
+    background-color: rgba(128, 128, 128, 0.219);
+    border: rgba(82, 80, 80, 0.226) solid 0.2rem;
+    border-radius: 0.5rem;
+    margin-top: 2rem;
+    width: 40rem;
+    height: 0.6rem;
+  }
+  
+  .learn-progress-bar-inner {
+    background-color: rgb(233, 53, 53);
+    height: 100%;
+    border-radius: 0.5rem;
+    transition: 0.5s;
+  }
+  
+  .learncard.results {
+    margin-top: 5rem;
+  }
+  .results-card {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  .results-card div {
+    margin: 1vw;
+  }
+  
+  .results-button {
+    position: relative;
+  }
+  .results-button link {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+  

@@ -4,7 +4,6 @@ import { CSSTransition } from "react-transition-group";
 const Flashcard = (props) => {
     const { id, current, wordpair } = props;
     const [side, setSide] = useState("front");
-
     const flip = useCallback(() => {
         if (side === "front") {
             setSide("back");

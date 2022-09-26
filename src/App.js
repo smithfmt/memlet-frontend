@@ -1,6 +1,12 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import './App.css';
+import "./css/app.css";
+import "./css/dashboard.css";
+import "./css/hud.css";
+import "./css/explore.css";
+import "./css/play.css";
+import "./css/view.css";
+import "./css/create.css";
 
 import NotFound from "./components/pages/NotFound";
 import Signup from "./components/pages/Signup";

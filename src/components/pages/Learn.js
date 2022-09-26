@@ -127,8 +127,8 @@ const Learn = (props) => {
                 })}  
             </div>
             :
-            <div className="learncard-container">
-                <div className={`learncard current results`}>
+            <div className="learncard-container current">
+                <div className={`learncard results`}>
                     <div className="results-card">
                         <h2>Results:</h2>
                         <div>You got {`${score}/${validList.words.length}`} right!</div>
