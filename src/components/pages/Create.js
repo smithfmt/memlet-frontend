@@ -43,24 +43,53 @@ const Create = (props) => {
     useEffect(() => {
         const handleKeyDown = (e) => {
             const {id} = e.target;
-            if (e.key==="Enter") {
-                if (id.split("-")[0]==="add") {
-                    document.getElementById("add-word").focus();
-                } else if (id.split("-")[0]==="wordpairForm") {
-                    e.preventDefault();
-                    if (id.split("-")[1]==="word") {
-                        document.getElementById(`wordpairForm-translation-${id.split("-")[2]}`).focus();
-                    } else {
-                        const el = document.getElementById(`wordpairForm-word-${parseInt(id.split("-")[2])+1}`);
-                        if (el) el.focus();
-                        else document.getElementById("add-word").focus();
+            switch (e.key) {
+                case "Enter": 
+                    if (id.split("-")[0]==="add") {
+                        document.getElementById("add-word").focus();
+                    } else if (id.split("-")[0]==="wordpairForm") {
+                        e.preventDefault();
+                        if (id.split("-")[1]==="word") {
+                            document.getElementById(`wordpairForm-translation-${id.split("-")[2]}`).focus();
+                        } else {
+                            const el = document.getElementById(`wordpairForm-word-${parseInt(id.split("-")[2])+1}`);
+                            if (el) el.focus();
+                            else document.getElementById("add-word").focus();
+                        };
                     };
-                };
+                    break;
+                case "Shift":
+                    if (locked) break;
+                    let newKeyboard = {...keyboard};
+                    newKeyboard.case = "upper";
+                    setKeyboard(newKeyboard);
+                    break;
+                case "Tab":
+                    e.preventDefault();
+                    setKeyboardHidden(!keyboardHidden);
+                    break;
+                default: break;
+            };
+        };
+        const handleKeyUp = (e) => {
+            switch (e.key) {
+                case "Shift":
+                    console.log("hi")
+                    if (locked) break;
+                    let newKeyboard = {...keyboard};
+                    newKeyboard.case = "lower";
+                    setKeyboard(newKeyboard);
+                    break;
+                default: break;
             };
         };
         window.addEventListener("keydown", handleKeyDown);
-        return () => window.removeEventListener("keydown", handleKeyDown);
-    }, []);
+        window.addEventListener("keyup", handleKeyUp);
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+            window.removeEventListener("keyup", handleKeyUp);
+        };
+    }, [keyboard, locked, setKeyboardHidden, keyboardHidden]);
 
     useEffect(() => {
         if (editing) {
@@ -273,6 +302,7 @@ const Create = (props) => {
             </div>
         );
     };
+    let rowNum = 0;
     return (
         <div className="page-container">
             {error.map(err => {
@@ -322,13 +352,15 @@ const Create = (props) => {
                     <button className="textarea-switch slide-button" onClick={() => setTextArea(!textArea)}>{textArea ? "Back to cards →" : "Create from text →"}</button>
                 </div>
             )}
-            <div className={`keyboard-container`}>
+            <div className={`keyboard-container ${keyboardHidden? "toggled":""}`}>
                     {Keyboards[keyboard.lang][keyboard.case].split(" ").map(row => {
+                        rowNum++;
                         return (
-                            <div className="keyboard-row">
+                            <div className="keyboard-row" key={`row${rowNum}`}>
                                 {row.split("").map(key => {
+                                    rowNum++;
                                     return (
-                                        <div className="keyboard-key" onClick={(e) => pressKey(e, key)} onMouseDown={(e) => {e.preventDefault()}}>
+                                        <div key={`key${rowNum}`} className="keyboard-key" onClick={(e) => pressKey(e, key)} onMouseDown={(e) => {e.preventDefault()}}>
                                             {key}
                                         </div>
                                     );
@@ -343,7 +375,10 @@ const Create = (props) => {
                         <div className="keyboard-key" onClick={(e) => pressKey(e, "del")} onMouseDown={(e) => {e.preventDefault()}}>←</div>
                         <div className={`keyboard-key ${keyboard.case==="special"?"active":""}`} onClick={(e) => pressKey(e, "special")} onMouseDown={(e) => {e.preventDefault()}}>@#?</div>
                     </div>
+                    
             </div>
+            <div className="keyboard-key keyboard-toggle" onClick={() => setKeyboardHidden(!keyboardHidden)}>{keyboardHidden?"^":"v"}</div>
+
         </div>
     );
 };

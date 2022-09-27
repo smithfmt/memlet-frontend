@@ -134,7 +134,11 @@
   position: fixed;
   z-index: 101;
   bottom: 0%;
-  margin-bottom: 2vw;
+  margin-bottom: 4vw;
+  transition: 0.4s;
+}
+.keyboard-container.toggled {
+  transform: translateY(40vw);
 }
 
 .keyboard-row {
@@ -168,4 +172,14 @@
 }
 .keyboard-key.active {
   background-color: rgb(99, 119, 150);
+}
+
+.keyboard-toggle {
+  position: fixed;
+  bottom: 0;
+  width: 20vw;
+  height: 2vw;
+  padding: 0.5vw;
+  border-radius: 2vw;
+  z-index: 102;
 }
