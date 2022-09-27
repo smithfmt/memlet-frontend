@@ -5,7 +5,6 @@ import Header from "../parts/Header";
 import ErrorFlash from "../parts/ErrorFlash";
 
 const Stats = (props) => {
-    console.log(props)
     const wordlist = props.location.pathname.split("/")[2];
     const [userData, setUserData] = useState([]);
     const [userLabels, setUserLabels] = useState([]);
@@ -15,7 +14,6 @@ const Stats = (props) => {
     const [error, setError] = useState([]);
     let errorCount = 0;
     let query = "stats";
-    console.log(wordlist)
     if (!wordlist) query = "all-stats";
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_ADDRESS}/${query}`, {
@@ -42,7 +40,7 @@ const Stats = (props) => {
             answerArray.sort((prev, next) => {return prev.id - next.id}).forEach(answer => {
                 dataArray = [...dataArray, (dataArray[dataArray.length-1] || 0) + (answer.correct_percentage===100 ? 1 : answer.correct_percentage/100 -1)];
                 let nextLabel = `${answer.answer}-${answer.correct_answer}`;
-                if (nextLabel.length>15) nextLabel = `${nextLabel.slice(0,15)}...`;
+                // if (nextLabel.length>15) nextLabel = `${nextLabel.slice(0,15)}...`;
                 labelArray.push(nextLabel);
             });
             if (dataArray.length===0) {
@@ -69,7 +67,19 @@ const Stats = (props) => {
             display:true,
             position:'right',
         },
+        scales: {
+            x: {
+                ticks: {
+                    callback: function (value, index, ticks) {
+                        const labelValue = this.getLabelForValue(value);
+                        console.log("Value",value, "TICKS", ticks)
+                        return labelValue.length>15 ? `${labelValue.slice(0,12)}...` : labelValue;
+                    },
+                },
+            },
+        },
     };
+
     const data = {
         labels: userLabels,
         datasets: [{
