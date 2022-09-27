@@ -40,7 +40,6 @@ const Stats = (props) => {
             answerArray.sort((prev, next) => {return prev.id - next.id}).forEach(answer => {
                 dataArray = [...dataArray, (dataArray[dataArray.length-1] || 0) + (answer.correct_percentage===100 ? 1 : answer.correct_percentage/100 -1)];
                 let nextLabel = `${answer.answer}-${answer.correct_answer}`;
-                // if (nextLabel.length>15) nextLabel = `${nextLabel.slice(0,15)}...`;
                 labelArray.push(nextLabel);
             });
             if (dataArray.length===0) {
@@ -72,7 +71,6 @@ const Stats = (props) => {
                 ticks: {
                     callback: function (value, index, ticks) {
                         const labelValue = this.getLabelForValue(value);
-                        console.log("Value",value, "TICKS", ticks)
                         return labelValue.length>15 ? `${labelValue.slice(0,12)}...` : labelValue;
                     },
                 },

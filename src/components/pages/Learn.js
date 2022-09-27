@@ -122,7 +122,7 @@ const Learn = (props) => {
                     const thisId = cardId;
                     cardId++;
                     return (
-                        <Learncard error={error} setError={setError} key={thisId} id={thisId} wordpair={wordpair} selectedLang={selectedLang} current={current} changeCard={changeCard} />
+                        <Learncard error={error} setError={setError} key={thisId} id={thisId} wordpair={wordpair} langs={{lang1:lang2, lang2:lang1, selectedLang}} selectedLang={selectedLang} current={current} changeCard={changeCard} />
                     );
                 })}  
             </div>

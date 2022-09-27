@@ -125,3 +125,47 @@
 .profile-button:hover {
   background-color: rgba(65, 1, 1, 0.575);
 }
+
+.keyboard-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  position: fixed;
+  z-index: 101;
+  bottom: 0%;
+  margin-bottom: 2vw;
+}
+
+.keyboard-row {
+  display: flex;
+  justify-content: center;
+}
+
+.keyboard-key {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 4vw;
+  height: 4vw;
+  background-color: white;
+  margin: 0.2vw;
+  font-size: 2vw;
+  box-shadow: 0 0.4vw 0.8vw 0 rgba(0, 0, 0, 0.2), 0 0.6vw 2vw 0 rgba(0, 0, 0, 0.19);
+  cursor: pointer;
+  border-radius: 0.2vw;
+}
+
+.keyboard-key:hover {
+  background-color: rgb(192, 214, 248);
+}
+.keyboard-key:active {
+  background-color: rgb(77, 94, 119);
+}
+
+.keyboard-key.space-key {
+  width: 20vw;
+}
+.keyboard-key.active {
+  background-color: rgb(99, 119, 150);
+}

@@ -116,7 +116,6 @@ const Dashboard = () => {
 
     const userLabels = stats.answers.map(ans => {
         let label = `${ans.answer} - ${ans.correct_answer}`;
-        if (label.length>15) label = `${label.slice(0,15)}...`;
         return label;
     });
     let userData = [];
@@ -139,6 +138,16 @@ const Dashboard = () => {
         legend:{
             display:true,
             position:'right',
+        },
+        scales: {
+            x: {
+                ticks: {
+                    callback: function (value, index, ticks) {
+                        const labelValue = this.getLabelForValue(value);
+                        return labelValue.length>15 ? `${labelValue.slice(0,12)}...` : labelValue;
+                    },
+                },
+            },
         },
     };
     const data = {
