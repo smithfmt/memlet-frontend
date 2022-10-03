@@ -52,11 +52,15 @@
 
 .profile-button-container {
   position: absolute;
+  margin: 0;
+  background-color: blue;
+  width: auto;
   right: 0%;
   top: 0%;
   height: 100%;
   display: flex;
   justify-content: center;
+  padding-right: 1vw;
 }
 
 .header-button-info {
@@ -96,6 +100,8 @@
   opacity: 1;
   animation: growDown 300ms ease-in-out forwards;
   transform-origin: top center;
+  display: flex;
+  justify-content: center;
 }
 
 .header-info-cover {
@@ -113,12 +119,8 @@
   justify-content: center;
   position: relative;
   width: 4.5vw;
-  height: 80%;
-  margin-top: 0.5vw;
-  margin-right: 1.5vw;
-  margin-left: 2vw;
+  height: 100%;
   border-radius: 20%;
-  border: transparent solid;
   background-color: transparent;
   z-index: 3;
 }
