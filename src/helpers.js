@@ -57,8 +57,9 @@ export const shuffle = (array) => {
     };
 
     const defarticles = ["τό","το","ὁ","ἡ"];
-    const splitAnswer = answer.split(",");
-    const splitTest = test.split(",");
+    const engParticles = ["a", "the", "A", "The", "I"];
+    const splitAnswer = answer.split(", ");
+    const splitTest = test.split(", ");
     switch (langs[langs.selectedLang]) {
         case "greek" :
             let wordType = "unknown";
@@ -86,12 +87,22 @@ export const shuffle = (array) => {
             };
             break;
         case "english":
+            const answers = [...splitAnswer];
+            answers.forEach(ans => {
+                const splitAns = ans.split(" ");
+                if (engParticles.includes(splitAns[0])) {
+                    console.log(ans)
+                    splitAns.shift();
+                    answers.push(splitAns.join(" ").trim());
+            }})
+            console.log("answers", answers, splitTest)
             const result = splitTest.reduce((acc, cur) => {
-                if (!splitAnswer.includes(cur)) return false;
+                if (!answers.includes(cur)) return false;
                 return true;
             },true);
             if (result) answer = test;
             break;
+        default: break;
     };
     
     
