@@ -18,6 +18,7 @@ const Learn = (props) => {
     const [learnEverything, setLearnEverything] = useState(false);
     const [error, setError] = useState([]);
     const [showResults, setShowResults] = useState(false);
+    const [strict, setStrict] = useState(localStorage.getItem("strictmode")?localStorage.getItem("strictmode"):false);
     let errorCount = 0;
     if (props.match.path.split("/")[2]==="dynamic" && !dynamic) {setDynamic(true)}
     if (!wordlist && !learnEverything) {setLearnEverything(true)};
@@ -100,7 +101,15 @@ const Learn = (props) => {
         lang1 = togLangs[0];
         lang2 = togLangs[1];
     };
+
+    const answerLangs = {lang1:lang2, lang2:lang1};
     
+    const setStrictMode = () => {
+        const newMode = !strict;
+        localStorage.setItem("strictmode", newMode);
+        setStrict(newMode);
+    };
+
     return (
         <div className="page-container">
             <Header />
@@ -113,6 +122,7 @@ const Learn = (props) => {
                         <button className={`lang1-button ${selectedLang}`} onClick={() => {setSelectedLang("lang1")}} ></button>
                         <button className={`lang2-button ${selectedLang}`} onClick={() => {setSelectedLang("lang2")}} ></button>
                     </div>
+                    {answerLangs[selectedLang]==="greek"?<div style={{marginRight: "1rem"}} className={`strict-accents-container`} ><div>Strict accents?</div><button className={`checkbox ${strict? "active":""}`} onClick={setStrictMode}></button></div>:<></>}
                     <div className="learn-progress-bar-outer">
                         <div className="learn-progress-bar-inner" style={{width: `${((current-1)/(shuffledList.length))*100}%`}}></div>
                     </div>
@@ -122,7 +132,7 @@ const Learn = (props) => {
                     const thisId = cardId;
                     cardId++;
                     return (
-                        <Learncard error={error} setError={setError} key={thisId} id={thisId} wordpair={wordpair} langs={{lang1:lang2, lang2:lang1, selectedLang}} selectedLang={selectedLang} current={current} changeCard={changeCard} />
+                        <Learncard error={error} strict={strict} setError={setError} key={thisId} id={thisId} wordpair={wordpair} langs={{lang1:lang2, lang2:lang1, selectedLang}} selectedLang={selectedLang} current={current} changeCard={changeCard} />
                     );
                 })}  
             </div>

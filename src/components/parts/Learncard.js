@@ -4,7 +4,7 @@ import { compare, capitalize } from "../../helpers";
 
 const Learncard = (props) => {
     const answerRef = React.createRef();
-    const { id, current, wordpair, selectedLang, changeCard, error, setError, langs } = props;
+    const { strict, id, current, wordpair, selectedLang, changeCard, error, setError, langs } = props;
 
     const [answered, setAnswered] = useState(false);
     const [corrPercent, setCorrPercent] = useState(100);
@@ -48,7 +48,7 @@ const Learncard = (props) => {
     const handleAnswer = (e) => {
         e.preventDefault();
         
-        const clientResult = compare(answerRef.current.value, correctAnswer, langs);
+        const clientResult = compare(answerRef.current.value, correctAnswer, langs, strict);
         const charArray = clientResult[0];
         setCorrPercent(clientResult[1]);
         let key = 0;
@@ -64,6 +64,7 @@ const Learncard = (props) => {
             correct: correctAnswer,
             wordlistItemId: wordpair.id,
             langs,
+            strict,
         })
         .then(res => {
             const { result } = res.data;

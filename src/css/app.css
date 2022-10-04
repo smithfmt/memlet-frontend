@@ -425,3 +425,22 @@ button {
 .answer-char {
   min-width: 0.5rem;
 }
+
+.checkbox {
+  position: relative;
+  width: 1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+  border: rgb(247, 132, 132) solid 0.2rem;
+  background-color: rgb(255, 221, 221);
+}
+.checkbox.active {
+  background-color: rgb(247, 132, 132);
+  border: rgb(230, 70, 70) solid 0.2rem;
+}
+.checkbox:hover {
+  background-color: rgb(247, 107, 107);
+}
+.checkbox:active {
+  border: rgb(202, 40, 40) solid 0.2rem;
+}

@@ -352,3 +352,13 @@
     height: 100%;
   }
   
+  .strict-accents-container {
+    position: absolute;
+    margin-left: 25rem;
+    margin-top: 1.2rem;
+    display: flex;
+    justify-content: center;
+  }
+  .strict-accents-container div {
+    margin-right: 0.5rem;
+  }

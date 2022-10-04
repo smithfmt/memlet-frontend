@@ -41,7 +41,7 @@ export const shuffle = (array) => {
     return string.join("");
   };
 
-  export const compare = (str1, str2, langs) => {
+  export const compare = (str1, str2, langs, strict) => {
     let position = 0;
     let score = 0;
     let result = [];
@@ -58,6 +58,13 @@ export const shuffle = (array) => {
 
     const defarticles = ["τό","το","ὁ","ἡ"];
     const engParticles = ["a", "the", "A", "The", "I"];
+    const GreekAccentsData = "ἐἒἔ ἑἓἕ εέὲ ΕΈῈ ἘἚἜ ἙἛἝ αάὰᾶᾳᾲᾷᾴ ἀἂἄἆᾀᾂᾄᾆ ἁἃἅἇᾁᾃᾅᾇ ΑΆᾺᾼ ἈἊἌἎᾈᾊᾌᾎ ἉἋἍἏᾉᾋᾍᾏ ηήὴῆῃῂῇῄ ἠἢἤἦᾐᾒᾔᾖ ἡἣἥἧᾑᾓᾕᾗ ΗΉῊῌ ἨἪἬἮᾘᾚᾜᾞ ἩἫἭἯᾙᾛᾝᾟ ιίὶῖ ἰἲἴἶ ἱἳἵἷ ΙΊῚ ἸἺἼἾ ἹἻἽἿ οόὸ ὀὂὄ ὁὃὅ ΟΌῸ ὈὊὌ ὉὋὍ υύὺῦ ὐὒὔὖ ὑὓὕὗ ΥΎῪ ὙὛὝὟ ωώὼῶῳῲῷῴ ὠὢὤὦᾠᾢᾤᾦ ὡὣὥὧᾡᾣᾥᾧ ΩΏῺῼ ὨὪὬὮᾨᾪᾬᾮ ὩὫὭὯᾩᾫᾭᾯ";
+    const greekAccents = {};
+    GreekAccentsData.split(" ").forEach(accent => {
+        let splitAccent = accent.split("");
+        splitAccent.shift();
+        greekAccents[accent[0]] = splitAccent.join();
+    });
     const splitAnswer = answer.split(", ");
     const splitTest = test.split(", ");
     switch (langs[langs.selectedLang]) {
@@ -115,14 +122,14 @@ export const shuffle = (array) => {
             position++;
             return;
         };
-        if (answerArr[position]===char) {
+        if (answerArr[position]===char||(strict===false&&greekAccents[char].includes(answerArr[position]))) {
             result.push({char, correct: "correct"});
             score++;
             last = true;
             position++;
             return;
         };
-        if ((last===false || offset===true) && answerArr[position-1]===char) {
+        if ((last===false || offset===true) && answerArr[position-1]===char||(strict===false&&greekAccents[char].includes(answerArr[position-1]))) {
             result.push({char, correct: "correct"});
             score++;
             last = true;

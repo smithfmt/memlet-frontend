@@ -296,7 +296,7 @@ const Create = (props) => {
     let textareaActive = "";
     textArea ? textareaActive = "textareaActive" : textareaActive = "";
     const editWordlist = JSON.parse(localStorage.getItem("editWordlist"));
-    if (!wordlist || (editing && (!wordlist.words.length || (editWordlist && !editWordlist.words)))) {
+    if (!wordlist || (editing && editWordlist && !editWordlist.words)) {
         return (
             <div className="page-container">
             {error.map(err => {
@@ -323,7 +323,7 @@ const Create = (props) => {
             <Header />
             <h2 className="create-page-title">{!editing ? "Create" : "Edit"}</h2>
             <div className="create-page-header">
-                <button style={{marginRight: "1rem"}} className={`slide-button process-button ${textareaActive} ${wordlist.priv?"active":""}`} onClick={privateWordlist}><img src={wordlist.priv?Private:Unprivate} alt="bin" /></button>
+                <button style={{marginRight: "1rem"}} className={`slide-button process-button ${textareaActive} ${wordlist.priv?"active":""}`} onClick={privateWordlist}><img src={wordlist.priv?Private:Unprivate} alt="priv" /></button>
                 <button style={{marginRight: "3rem"}} className={`slide-button process-button ${textareaActive}`} onClick={removeWordlist}><img src={Bin} alt="bin" /></button>
                 <form id="title-form" autoComplete="off" spellCheck="false" className="word-list-title">
                     <input type="text" ref={titleRef} name="title" required placeholder="Title" onInput={() => updateTitle()} defaultValue={wordlist.title || "Title"} />
