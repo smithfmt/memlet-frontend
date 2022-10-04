@@ -122,6 +122,7 @@ const Explore = (props) => {
                         const createList = {...exploreList};
                         createList.title = `${createList.title} (Copy)`;
                         createList.type = "create";
+                        createList.priv = true;
                         localStorage.setItem("createWordlist", JSON.stringify(createList));
                         axios.put(`${process.env.REACT_APP_API_ADDRESS}/copy`, exploreList)
                         .catch((err) => {
