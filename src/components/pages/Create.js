@@ -8,12 +8,14 @@ import ErrorFlash from "../parts/ErrorFlash";
 import LanguageSelect from "../parts/LanguageSelect";
 import { Keyboards } from "../../keyboards";
 
-import Bin from "../../images/Icons/bin.png"
+import Bin from "../../images/Icons/bin.png";
+import Private from "../../images/Icons/private.png";
+import Unprivate from "../../images/Icons/unprivate.png";
 
 const Create = (props) => {
     const type = props.match.path.split("/")[1];
     let editing = type==="edit" ? true : false;
-    const [wordlist, setWordlist] = useState(JSON.parse(localStorage.getItem(`${type}Wordlist`)) || {words: [], title: "New Wordlist", langs: "english-english", userId: "", toDelete: [], type});
+    const [wordlist, setWordlist] = useState(JSON.parse(localStorage.getItem(`${type}Wordlist`)) || {words: [], title: "New Wordlist", langs: "english-english", userId: "", toDelete: [], type, priv: true});
     const [textArea, setTextArea] = useState(false);
     const [keyboardHidden, setKeyboardHidden] = useState(false);
     const [focused, setFocused] = useState("");
@@ -100,9 +102,9 @@ const Create = (props) => {
                 },
             })
             .then(res => {
-                let { words, title, langs, userId } = res.data.wordlist;
+                let { words, title, langs, userId, private:priv} = res.data.wordlist;
                 words = words.sort((a,b) => {return a.id - b.id});
-                setWordlist({words, title, langs, userId, toDelete: [], type});
+                setWordlist({words, title, langs, userId, toDelete: [], type, priv});
             })
             .catch((err) => {
                 if (!err.response) console.log(err)
@@ -133,6 +135,7 @@ const Create = (props) => {
                 langs: wordlist.langs,
                 userId: wordlist.userId,
                 toDelete: wordlist.toDelete,
+                priv: wordlist.priv,
             })
             .then(() => {
                 localStorage.removeItem("editWordlistId");
@@ -283,6 +286,12 @@ const Create = (props) => {
         };
     };
 
+    const privateWordlist = () => {
+        const newWordlist = {...wordlist};
+        newWordlist.priv = !wordlist.priv;
+        setWordlist(newWordlist);
+    };
+
     let wordpairIndex = -1;
     let textareaActive = "";
     textArea ? textareaActive = "textareaActive" : textareaActive = "";
@@ -314,11 +323,12 @@ const Create = (props) => {
             <Header />
             <h2 className="create-page-title">{!editing ? "Create" : "Edit"}</h2>
             <div className="create-page-header">
-                <button className={`slide-button process-button ${textareaActive}`} onClick={removeWordlist}><img src={Bin} alt="bin" /></button>
+                <button style={{marginRight: "1rem"}} className={`slide-button process-button ${textareaActive} ${wordlist.priv?"active":""}`} onClick={privateWordlist}><img src={wordlist.priv?Private:Unprivate} alt="bin" /></button>
+                <button style={{marginRight: "3rem"}} className={`slide-button process-button ${textareaActive}`} onClick={removeWordlist}><img src={Bin} alt="bin" /></button>
                 <form id="title-form" autoComplete="off" spellCheck="false" className="word-list-title">
                     <input type="text" ref={titleRef} name="title" required placeholder="Title" onInput={() => updateTitle()} defaultValue={wordlist.title || "Title"} />
                 </form>
-                <button className={`slide-button process-button ${textareaActive}`} onClick={publishWordlist}>{editing ? "Update" : "Publish"} →</button>
+                <button style={{marginRight: "6rem",marginLeft:"3rem"}} className={`slide-button process-button ${textareaActive}`} onClick={publishWordlist}>{editing ? "Update" : "Publish"} →</button>
             </div>
             <LanguageSelect updateTitle={updateTitle} langs={wordlist.langs} />
             {textArea ? (<>

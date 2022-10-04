@@ -308,8 +308,6 @@
   }
   .slide-button.process-button {
     width: 5rem;
-    margin-left: 3rem;
-    margin-right: 3rem;
   }
   .create-page-header button {
     width: 8rem;
@@ -319,6 +317,16 @@
     border: rgb(247, 132, 132) solid 0.2rem;
     border-radius: 8px;
     box-sizing: border-box;
+  }
+
+  .process-button.active {
+    background-color: rgb(247, 132, 132);
+  }
+  .slide-button:hover.active {
+    background: linear-gradient(to right, rgb(241, 176, 176) 50%, rgb(247, 132, 132) 0);
+    background-size: 200% 100%;
+    background-position: right;
+    animation: fillUp 0.4s forwards;
   }
   
   @keyframes fillUp {
