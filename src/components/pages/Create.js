@@ -32,17 +32,6 @@ const Create = (props) => {
     let history = useHistory();
 
     useEffect(() => {
-        if (!wordlist) return;
-        else if (type==="create" && wordlist.type!==type) {
-            setWordlist({words: [], title: "New Wordlist", langs: "english-english", userId: "", toDelete: [], type});
-            document.getElementById("title-form").reset();
-            if (wordlist.words && wordlist.type===type) {
-                localStorage.setItem(`${type}Wordlist`, JSON.stringify(wordlist));
-            };
-        };
-    }, [wordlist, type]);
-
-    useEffect(() => {
         const handleKeyDown = (e) => {
             const {id} = e.target;
             switch (e.key) {
@@ -104,7 +93,10 @@ const Create = (props) => {
             .then(res => {
                 let { words, title, langs, userId, private:priv} = res.data.wordlist;
                 words = words.sort((a,b) => {return a.id - b.id});
-                setWordlist({words, title, langs, userId, toDelete: [], type, priv});
+                const newWordlist = {words, title, langs, userId, toDelete: [], type, priv};
+                setWordlist(newWordlist);
+                updateWordlistLS(newWordlist);
+                document.getElementById("title-input").value = title;
             })
             .catch((err) => {
                 if (!err.response) console.log(err)
@@ -118,12 +110,17 @@ const Create = (props) => {
         };
     }, [editing, type, error]);
 
+    const updateWordlistLS = (wl) => {
+        localStorage.setItem(`${type}Wordlist`, JSON.stringify(wl));
+    };
+
     const addWord = (e) => {
         e.preventDefault();
         const oldWordlist = {...wordlist};
         oldWordlist.words = [...wordlist.words, {word: wordRef.current.value, translation: translationRef.current.value}];
         oldWordlist.type = type;
         setWordlist(oldWordlist);
+        updateWordlistLS(oldWordlist);
         e.target.reset();
     };
     const publishWordlist = () => {
@@ -138,6 +135,7 @@ const Create = (props) => {
                 priv: wordlist.priv,
             })
             .then(() => {
+                localStorage.removeItem(`${type}Wordlist`);
                 localStorage.removeItem("editWordlistId");
                 history.push("/dashboard");
             })
@@ -147,7 +145,6 @@ const Create = (props) => {
                     setError([...error, err.response.data]);
                 };
             });
-            setWordlist("");
         } else {
             axios.post(`${process.env.REACT_APP_API_ADDRESS}/create`, {wordlist})
             .then(() => {
@@ -160,7 +157,6 @@ const Create = (props) => {
                     setError([...error, err.response.data]);
                 };
             });
-            setWordlist("");
         };
     };   
 
@@ -169,13 +165,15 @@ const Create = (props) => {
         if (!value) value = type;
         oldWordlist.words[index][type] = value;
         setWordlist(oldWordlist);
+        updateWordlistLS(oldWordlist);
     };
-    const updateTitle = (lang1, lang2) => {
+    const updateTitle = (lang1, lang2, title) => {
         const oldWordlist = {...wordlist};
-        oldWordlist.title = titleRef.current.value;
+        oldWordlist.title = title?title:titleRef.current.value;
         oldWordlist.langs = `${lang1 ? `${lang1}-${lang2}` : wordlist.langs}`;
         oldWordlist.type = type;
         setWordlist(oldWordlist);
+        updateWordlistLS(oldWordlist);
     };
 
     const deleteWordpair = (wordpair) => {
@@ -198,6 +196,7 @@ const Create = (props) => {
             })
             .then(() => {
                 localStorage.removeItem("editWordlistId");
+                localStorage.removeItem(`${type}Wordlist`);
                 history.push("/dashboard");
             })
             .catch((err) => {
@@ -312,6 +311,7 @@ const Create = (props) => {
         );
     };
     let rowNum = 0;
+    console.log(wordlist.title)
     return (
         <div className="page-container">
             {error.map(err => {
@@ -326,7 +326,7 @@ const Create = (props) => {
                 <button style={{marginRight: "1rem"}} className={`slide-button process-button ${textareaActive} ${wordlist.priv?"active":""}`} onClick={privateWordlist}><img src={wordlist.priv?Private:Unprivate} alt="priv" /></button>
                 <button style={{marginRight: "3rem"}} className={`slide-button process-button ${textareaActive}`} onClick={removeWordlist}><img src={Bin} alt="bin" /></button>
                 <form id="title-form" autoComplete="off" spellCheck="false" className="word-list-title">
-                    <input type="text" ref={titleRef} name="title" required placeholder="Title" onInput={() => updateTitle()} defaultValue={wordlist.title || "Title"} />
+                    <input id="title-input" type="text" ref={titleRef} name="title" required placeholder="Title" onInput={() => updateTitle()} defaultValue={wordlist.title || "Title"} />
                 </form>
                 <button style={{marginRight: "6rem",marginLeft:"3rem"}} className={`slide-button process-button ${textareaActive}`} onClick={publishWordlist}>{editing ? "Update" : "Publish"} →</button>
             </div>
