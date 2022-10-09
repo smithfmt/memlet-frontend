@@ -6,6 +6,8 @@ import ErrorFlash from "../parts/ErrorFlash";
 
 const Stats = (props) => {
     const wordlist = props.location.pathname.split("/")[2];
+    let folderId = props.location.search.split("?")[1]||null;
+    if (folderId&&folderId.includes("F")) folderId = folderId.split("F")[0];
     const [userData, setUserData] = useState([]);
     const [userLabels, setUserLabels] = useState([]);
     const [wordlistItems, setWordlistItems] = useState([]);
@@ -15,10 +17,11 @@ const Stats = (props) => {
     let errorCount = 0;
     let query = "stats";
     if (!wordlist) query = "all-stats";
+    if (folderId) query = "folder-stats";
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_ADDRESS}/${query}`, {
             params: {
-                id: localStorage.getItem("statsWordlistId"),
+                id: folderId? folderId : localStorage.getItem("statsWordlistId"),
             },
         })
         .then(res => {

@@ -8,6 +8,9 @@ import ErrorFlash from "../parts/ErrorFlash";
 const Flashcards = (props) => {
     let history = useHistory();
     const wordlist = props.location.pathname.split("/")[3];
+    let wordlistId = props.location.search.split("?")[1];
+    let folderId = null;
+    if (wordlistId&&wordlistId.includes("F")) folderId = wordlistId.split("F")[0];
     const [validList, setValidList] = useState([]);
     const [learnEverything, setLearnEverything] = useState(false);
     const [error, setError] = useState([]);
@@ -17,11 +20,9 @@ const Flashcards = (props) => {
     useEffect(() => {
         let listType = "play";
         if (learnEverything) listType="everything";
-        axios.get(`${process.env.REACT_APP_API_ADDRESS}/${listType}`, {
-            params: {
-                id: localStorage.getItem("playWordlistId"),
-            },
-        })
+        let params = {id: localStorage.getItem("playWordlistId")};
+        if (folderId) params.folderId = folderId;
+        axios.get(`${process.env.REACT_APP_API_ADDRESS}/${listType}`, { params })
         .then(res => {
             const valid = res.data.wordlist.words;
             if (!valid.length) {

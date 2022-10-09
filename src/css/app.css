@@ -301,12 +301,17 @@ button {
 }
 
 .edit.section {
-  width: auto;
-  margin-left: 0;
+  display: flex;
+  justify-content: center;
   box-sizing: border-box;
   border-image: linear-gradient(to bottom, rgb(85, 83, 83), rgba(95, 95, 95, 0.048)) 1 100% ;
   border-width: 0.2rem;
   border-style: solid;
+}
+
+.section {
+  max-width: 40%;
+  min-width: 20%;
 }
 
 .edit.section .slide-button.expand {

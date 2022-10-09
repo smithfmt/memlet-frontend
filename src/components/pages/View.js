@@ -8,7 +8,6 @@ import WordPair from "../parts/WordPair";
 import LanguageSelect from "../parts/LanguageSelect";
 import WordlistCard from "../parts/WordlistCard";
 import { capitalize } from "../../helpers";
-import Bin from "../../images/Icons/bin.png"
 
 function importAll(r) {
     let images = {};
@@ -64,7 +63,7 @@ const View = (props) => {
                     dataArray = "No Data";
                 };
                 setUserData(dataArray);
-                setUserLabels(labelArray)
+                setUserLabels(labelArray);
             })
             .catch((err) => {
                 if (!error.filter(e => e.msg === err.response.data.msg).length) {
@@ -92,7 +91,44 @@ const View = (props) => {
                     },
                 })
                 .then(res => {
-                    setFolder(res.data.folder);
+                    const folderData = res.data.folder;
+                    folderData.wordlists.sort((a,b) => {
+                        if (a.title>b.title) return 1;
+                        if (b.title>a.title) return -1;
+                        return 0;
+                    });
+                    setFolder(folderData);
+                    axios.get(`${process.env.REACT_APP_API_ADDRESS}/folder-stats`, {
+                        params: {
+                            id: parseInt(res.data.folder.id),
+                        },
+                    })
+                    .then(res => {
+                        const { wordlistItems } = res.data;
+                        let answerArray = [];
+                        wordlistItems.forEach(item => {
+                            item.test_answers.forEach(answer => {
+                                answerArray.push(answer);
+                            });
+                        });
+                        let dataArray = [];
+                        let labelArray = [];
+                        answerArray.sort((prev, next) => {return prev.id - next.id}).forEach(answer => {
+                            dataArray = [...dataArray, (dataArray[dataArray.length-1] || 0) + (answer.correct_percentage===100 ? 1 : answer.correct_percentage/100 -1)];
+                            let nextLabel = `${answer.answer}-${answer.correct_answer}`;
+                        labelArray.push(nextLabel);
+                        });
+                        if (dataArray.length===0) {
+                            dataArray = "No Data";
+                        };
+                        setUserData(dataArray);
+                        setUserLabels(labelArray);
+                    })
+                    .catch((err) => {
+                        if (!error.filter(e => e.msg === err.response.data.msg).length) {
+                            setError([...error, err.response.data]);
+                        };
+                    });
                 })
                 .catch((err) => {
                     if (!error.filter(e => e.msg === err.response.data.msg).length) {
@@ -102,7 +138,7 @@ const View = (props) => {
             };
         };        
     }, [history, wordlist, error, wordlistId, type, folder]);
-
+ 
     const options = {
         title:{
             display:true,
@@ -136,65 +172,8 @@ const View = (props) => {
             data: userData,
         }],
     };
-    
-    const toggleEditMode = () => {
-        setEditing(!editing);
-        const include = folder.wordlists.map(list => list.id);
-        setIncluded(include);
-    };
 
-    const updateFolder = () => {
-        const idArray = folder.wordlists.map(list => list.id).filter(id => !included.includes(id));
-        axios.put(`${process.env.REACT_APP_API_ADDRESS}/removeWordlistsFromFolder`, {idArray, length:included.length, folderId: wordlistId})
-        .then(res => {
-            history.push("/dashboard");
-        })
-        .catch((err) => {
-            if (!error.filter(e => e.msg === err.response.data.msg).length) {
-                setError([...error, err.response.data]);
-            };
-        });
-    };
-    const deleteFolder = () => {
-        axios.delete(`${process.env.REACT_APP_API_ADDRESS}/deleteFolder`, {
-            params: {wordlistId},
-        })
-        .then(res => {
-            history.push("/dashboard");
-        })
-        .catch((err) => {
-            if (!error.filter(e => e.msg === err.response.data.msg).length) {
-                setError([...error, err.response.data]);
-            };
-        });
-    };
-
-    if (folder) {
-        return (
-            <div className="page-container">
-                {error.map(err => {
-                    errorCount++;
-                    return (
-                        <ErrorFlash key={`error-${errorCount}`} errorList={error} errorNum={errorCount} setError={setError} error={err} />
-                    );
-                })}
-                <Header />
-                <h2 className="page-title">{wordlist}</h2>
-                <div className="view-folder-button-container">
-                    <button onClick={toggleEditMode} className={`slide-button ${editing ? "editing" : ""}`}>{editing ? "Editing" : "Edit"}</button>
-                    <button onClick={updateFolder} className={`slide-button ${editing ? "" : "hidden"}`}>{`Update \xa0 (${included.length} Items)`}</button>
-                    <button className={`slide-button`} onClick={deleteFolder}><img src={Bin} alt="bin" /></button>
-                </div>
-                <div className="folder wordlist-card-container container">
-                    {folder.wordlists.map(list => {
-                        return (<WordlistCard key={list.id} id={list.id} list={list} editing={editing ? "editing" : ""} included={included} setIncluded={setIncluded} />);
-                    })}
-                </div>
-            </div>
-        );
-    };
-
-    if (!viewList.words) {
+    if (!viewList.words&&!folder) {
         return (
             <div className="page-container">
                 {error.map(err => {
@@ -226,7 +205,14 @@ const View = (props) => {
         </div>);
     };
     let wordpairIndex = -1;
-    const playButtons = ["learn", "flashcards", "dynamic"]
+    const playButtons = ["learn", "flashcards", "dynamic"];
+    let id = viewList.id;
+    let navName = wordlist;
+    let wordlists;
+    if (folder) {
+        id = folder.id;
+        navName = folder.name;
+    };
     return (
         <div className="page-container">
             <Header />
@@ -234,11 +220,11 @@ const View = (props) => {
             <div className="fade divider view" />
             <div className="view-container">
                 <div className="play section column">
-                    <h2 className="section-title"><Link className="container" to={`/play/${wordlist}`} replace onClick={() => {localStorage.setItem(`playWordlistId`, viewList.id)}} >Play</Link></h2>
-                    {playButtons.map( button => {
+                    <h2 className="section-title"><Link className="container" to={`/play/${navName}${folder?`?${id}F`:""}`} replace onClick={() => {localStorage.setItem(`playWordlistId`, id)}} >Play</Link></h2>
+                    {playButtons.map(button => {
                         return (
-                            <button key={`${button}-link`} onClick={localStorage.setItem("playWordlistId", viewList.id)} className="play-button container slide-button">
-                                <Link className="play-button-link" to={`/play/${button}/${wordlist}`} >
+                            <button key={`${button}-link`} onClick={localStorage.setItem("playWordlistId", id)} className="play-button container slide-button">
+                                <Link className="play-button-link" to={`/play/${button}/${navName}${folder?`?${id}F`:""}`}  >
                                     <div>{capitalize(button)}</div>
                                     <img src={images[`${button}.png`].default} alt={button} />
                                 </Link>
@@ -246,27 +232,37 @@ const View = (props) => {
                         );
                     })}
                 </div>
-
                 <div className="edit section column">
-                    <h2 className="edit section-title"><Link className="container" to={`/edit/${wordlist}`} replace onClick={() => {localStorage.setItem(`editWordlistId`, viewList.id)}} >Edit</Link></h2>
-                    <div className="list-container view scale-down">
-                        <LanguageSelect langs={viewList.langs} />
-                        {viewList.words.map(wordpair => {
-                            wordpairIndex++;
-                            if (!expand && wordpairIndex>4) return "";
-                            return(
-                            <WordPair 
-                                key={`${wordpair.word}-${wordpair.translation}-wordpair`} 
-                                wordpair={wordpair} 
-                                index={wordpairIndex} 
-                            />);
-                        })}
-                    </div>
+                <h2 className="edit section-title"><Link className="container" to={`/edit/${navName}${folder?`?${id}F`:""}`} replace onClick={() => {localStorage.setItem(`editWordlistId`, id)}} >Edit</Link></h2>
+                    {folder? <>
+                        <div className="folder wordlist-card-container container">
+                            {(expand? folder.wordlists:folder.wordlists.slice(0,8)).map(list => {
+                                return (<WordlistCard key={list.id} id={list.id} list={list} />);
+                            })}
+                        </div>
+                    </>
+                        : <>
+                        
+                        <div className="list-container view scale-down">
+                            <LanguageSelect langs={viewList.langs} />
+                            {viewList.words.map(wordpair => {
+                                wordpairIndex++;
+                                if (!expand && wordpairIndex>4) return "";
+                                return(
+                                <WordPair 
+                                    key={`${wordpair.word}-${wordpair.translation}-wordpair`} 
+                                    wordpair={wordpair} 
+                                    index={wordpairIndex} 
+                                />);
+                            })}
+                        </div>
                     {viewList.words.length>5 ? (<button className="slide-button expand" onClick={() => setExpand(!expand)}>{!expand ? "v" : "^"}</button>) : ""}
+                    </>}
+                    
                 </div>
 
                 <div className="stats section column">
-                    <h2 className="section-title"><Link className="container" to={`/stats/${wordlist}`} replace onClick={() => {localStorage.setItem(`statsWordlistId`, viewList.id)}} >Stats</Link></h2>
+                    <h2 className="section-title"><Link className="container" to={`/stats/${navName}${folder?`?${id}F`:""}`} replace onClick={() => {localStorage.setItem(`statsWordlistId`, id)}} >Stats</Link></h2>
                     {statsColumn}
                 </div>
             </div>

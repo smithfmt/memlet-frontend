@@ -171,21 +171,12 @@
     margin-left: 2rem;
     margin-right: 2rem;
   }
-  
-  .folder.wordlist-card-container {
-    margin-left: 2rem;
-  }
   .folder-title-container {
     margin-top: 2rem;
     margin-left: 8rem;
     display: flex;
     align-items: center;
-  }
-  
-  .folder.wordlist-card-container {
-    margin-top: 1rem;
-  }
-  
+  }  
   .view-folder-button-container {
     margin-top: 1rem;
     display: flex;

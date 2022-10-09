@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { capitalize } from "../../helpers";
 import WordPair from "../parts/WordPair";
 import LanguageSelect from "../parts/LanguageSelect";
-
+import WordlistCard from "../parts/WordlistCard";
 import upvote from "../../images/Icons/upvote.png";
 import upvoted from "../../images/Icons/upvoted.png";
 
@@ -22,9 +22,11 @@ const Explore = (props) => {
     const wordlist = props.location.pathname.split("/")[2];
     const [error, setError] = useState([]);
     const [wordlists, setWordlists] = useState([]);
+    const [folders, setFolders] = useState([]);
     const [exploreList, setExploreList] = useState({});
+    const [exploreFolder, setExploreFolder] = useState({});
     const [currentUser, setCurrentUser] = useState(false);
-    const [exploreFilters, setExploreFilters] = useState({sortBy: "Top Rated", viewAll: false, filter: {lang:"all", number: 0}, langs: []});
+    const [exploreFilters, setExploreFilters] = useState({sortBy: "Top Rated", viewAll: false, filter: {lang:"all", number: 0}, langs: [], viewing: "Wordlists"});
     const [prevSortBy, setPrevSortBy] = useState("Top Rated");
     let errorCount = 0;
 
@@ -43,25 +45,60 @@ const Explore = (props) => {
     useEffect(() => {
         if (wordlist) {
             setWordlists([]);
-            axios.get(`${process.env.REACT_APP_API_ADDRESS}/explore-list`, {
-                params: {
-                    id: parseInt(localStorage.getItem("exploreListId")),
-                },
-            })
+            const folderId = props.location.search.split("?")[1];
+            console.log(folderId)
+            if (folderId&& folderId.includes("F")) {
+                axios.get(`${process.env.REACT_APP_API_ADDRESS}/folderByIdExplore`, {
+                    params: {
+                        id: parseInt(folderId.split("F")[0]),
+                    },
+                })
+                .then(res => {
+                    setExploreList({});
+                    const folderData = res.data.folder;
+                    folderData.wordlists.sort((a,b) => {
+                        if (a.title>b.title) return 1;
+                        if (b.title>a.title) return -1;
+                        return 0;
+                    });
+                    setExploreFolder(folderData);
+                    setCurrentUser(res.data.user);
+                })
+                .catch((err) => {
+                    if (!error.filter(e => e.msg === err.response.data.msg).length) {
+                        setError([...error, err.response.data]);
+                    };
+                });
+            } else {
+                axios.get(`${process.env.REACT_APP_API_ADDRESS}/explore-list`, {
+                    params: {
+                        id: parseInt(localStorage.getItem("exploreListId")),
+                    },
+                })
+                .then(res => {
+                    setExploreList(res.data.wordlist);
+                    setCurrentUser(res.data.user);
+                })
+                .catch((err) => {
+                    if (!error.filter(e => e.msg === err.response.data.msg).length) {
+                        setError([...error, err.response.data]);
+                    };
+                });
+            };            
+        } else {
+            setExploreList({});
+            axios.get(`${process.env.REACT_APP_API_ADDRESS}/explore`)
             .then(res => {
-                setExploreList(res.data.wordlist);
-                setCurrentUser(res.data.user);
+                setWordlists(res.data.wordlists);
             })
             .catch((err) => {
                 if (!error.filter(e => e.msg === err.response.data.msg).length) {
                     setError([...error, err.response.data]);
                 };
             });
-        } else {
-            setExploreList({});
-            axios.get(`${process.env.REACT_APP_API_ADDRESS}/explore`)
+            axios.get(`${process.env.REACT_APP_API_ADDRESS}/publicFolders`)
             .then(res => {
-                setWordlists(res.data.wordlists);
+                setFolders(res.data.folders);
             })
             .catch((err) => {
                 if (!error.filter(e => e.msg === err.response.data.msg).length) {
@@ -104,10 +141,62 @@ const Explore = (props) => {
         };
         setWordlists(newLists);
     }, [wordlists, exploreFilters, prevSortBy]);
-
-    if (exploreList.words) {
+    if (exploreList.words || exploreFolder.wordlists) {
+        console.log(exploreFolder.wordlists)
         let wordpairIndex = -1;
-        return (
+        if (exploreFolder.wordlists) {
+            return (<div className="page-container">
+                {error.map(err => {
+                    errorCount++;
+                    return (
+                        <ErrorFlash key={`error-${errorCount}`} errorList={error} errorNum={errorCount} setError={setError} error={err} />
+                    );
+                })}
+                <Header />
+                <div className="exploreList-buttons">
+                <button className="copy-button slide-button process-button">
+                    <Link to="/dashboard" onClick={() => {
+                        axios.put(`${process.env.REACT_APP_API_ADDRESS}/copy`, {folder: exploreFolder})
+                        .catch((err) => {
+                            if (!error.filter(e => e.msg === err.response.data.msg).length) {
+                                setError([...error, err.response.data]);
+                            };
+                        })}} >
+                    Save
+                    </Link>
+                </button>
+                    <h2>{exploreFolder.name}</h2>
+                    <button className="upvote-button slide-button process-button" onClick={() => {
+                        const newExploreFolder = {...exploreFolder};
+                        if (newExploreFolder.upvoted.includes(currentUser)) {
+                            newExploreFolder.upvoted = newExploreFolder.upvoted.filter(id => id!==currentUser);
+                        } else {
+                            newExploreFolder.upvoted = [...newExploreFolder.upvoted, currentUser];
+                        };
+                        axios.put(`${process.env.REACT_APP_API_ADDRESS}/upvote`, exploreFolder)
+                        .then(res => {
+                            if (res.data.response.upvoted!==exploreFolder.upvoted) {
+                                setExploreFolder({...res.data.response, wordlists: exploreFolder.wordlists});
+                            };
+                        })
+                        .catch((err) => {
+                            if (!error.filter(e => e.msg === err.response.data.msg).length) {
+                                setError([...error, err.response.data]);
+                            };
+                        });
+                        setExploreFolder(newExploreFolder);
+                        }}><img className="upvote-image" alt="upvote-button" src={exploreFolder.upvoted.includes(currentUser) ? upvoted : upvote}></img>
+                    </button>
+                </div>
+                <div className="list-container view explore">
+                <div className="folder wordlist-card-container container">
+                    {exploreFolder.wordlists.map(list => {
+                        return (<WordlistCard key={list.id} id={list.id} list={list} exploreFolder={true} />);
+                    })}
+                </div>
+                </div>
+            </div>)
+        } else return (
             <div className="page-container">
                 {error.map(err => {
                     errorCount++;
@@ -206,6 +295,14 @@ const Explore = (props) => {
             <div className="explore-container-details">
                 <h2>{exploreFilters.sortBy}</h2>
                 <div className="sortBy-filters">
+                    <div className="sortBy-label">{"Viewing:"}</div>
+                    <div className="sortBy-dropdown">
+                        <div className="sortBy-dropdown-selected">{exploreFilters.viewing}</div>
+                        <div className="sortBy-dropdown-menu">
+                            <button className={`${exploreFilters.viewing==="Wordlists"? "selected" : ""} top`} onClick={() => updateExploreFilters("viewing", "Wordlists")}>Wordlists</button>
+                            <button className={`${exploreFilters.sortBy==="Folders"? "selected" : ""}`} onClick={() => updateExploreFilters("viewing", "Folders")}>Folders</button>
+                        </div>
+                    </div>
                     <div className="sortBy-label">{"Filter:"}</div>
                     <div className="sortBy-dropdown">
                         <div className="sortBy-dropdown-selected">{`${capitalize(exploreFilters.filter.lang)} (${exploreFilters.filter.lang==="all" ? wordlists.length : exploreFilters.filter.number})`}</div>
@@ -239,7 +336,7 @@ const Explore = (props) => {
                 </div> 
             </div>
             <div className="explore-container">
-                {wordlists.map(list => {
+                {exploreFilters.viewing==="Wordlists"?wordlists.map(list => {
                     if (!list.langs.split("-").includes(exploreFilters.filter.lang) && exploreFilters.filter.lang!=="all") return "";
                     if ((listNumber<9 || exploreFilters.viewAll) && listNumber<100) {
                         listNumber++;
@@ -259,7 +356,27 @@ const Explore = (props) => {
                             </Link>
                         )
                     } else return "";
-                    })}
+                    }):
+                    folders.map(folder => {
+                        if ((listNumber<9 || exploreFilters.viewAll) && listNumber<100) {
+                            listNumber++;
+                            return (
+                                <Link to={`/explore/${folder.name}?${folder.id}F`} onClick={() => localStorage.setItem("exploreListId", folder.id)} key={`exploreList-${folder.id}`}>
+                                    <button className="explore-card">
+                                        <div className="container explore-card-title">
+                                            <h2>{folder.name}</h2>
+                                            {avatars[`${folder.user.avatar}.png`] ? <div className="avatar-container"><img alt={folder.user.avatar} src={avatars[`${folder.user.avatar}.png`].default}/></div> : ""}
+                                        </div>
+                                        <div>{`Created by ${folder.user.username}`}</div>
+                                        <div>{folder.upvoted.length}👍</div>
+                                        <div>Copied {folder.copied} times</div>
+                                        <div className="wordlist-card-highlight"></div>
+                                    </button>
+                                </Link>
+                            )
+                        } else return "";
+                    })
+                }
             </div>
         </div>
     );

@@ -8,6 +8,12 @@ import Flashcards from "../../images/Play/flashcards.png";
 
 const Play = (props) => {
     const wordlist = props.match.params.wordlist || "";
+    let type = "wordlist";
+    let folderId = props.location.search.split("?")[1];
+    if (folderId&&folderId.includes("F")) {
+        type = "folder";
+        folderId = folderId.split("F")[0];
+    };
     return (
         <div className="page-container">
             <Header />
@@ -15,7 +21,7 @@ const Play = (props) => {
             <div className="fade divider view" />
             <div className="view-container">
                 <div className="play-page section">
-                <Link className="column" to={`/play/flashcards${wordlist ? `/${wordlist}` : ""}`} replace >
+                <Link className="column" to={`/play/flashcards${wordlist ? `/${type==="folder"?wordlist+`?${folderId}`:wordlist}` : ""}`} replace >
                     <h2 className="section-title">Flashcards</h2>
                     <div>
                         Simple flashcards for speedy learning
@@ -27,10 +33,10 @@ const Play = (props) => {
                 </div>
 
                 <div className="play-page section">
-                <Link className="column" to={`/play/learn${wordlist ? `/${wordlist}` : ""}`} replace >
+                <Link className="column" to={`/play/learn${wordlist ? `/${type==="folder"?wordlist+`?${folderId}`:wordlist}` : ""}`} replace >
                     <h2 className="section-title">Learn</h2>
                     <div>
-                        {`A vanilla learning tool that tests your knowledge of your wordlist${wordlist ? "" : "s"}`}
+                        {`A vanilla learning tool that tests your knowledge of your ${type}${wordlist ? "" : "s"}`}
                     </div>
                     <div className="img-container">
                         <img alt="learn" src={Learn} />
@@ -39,7 +45,7 @@ const Play = (props) => {
                 </div>
 
                 <div className="play-page section">
-                <Link className="column" to={`/play/dynamic${wordlist ? `/${wordlist}` : ""}`} replace >
+                <Link className="column" to={`/play/dynamic${wordlist ? `/${type==="folder"?wordlist+`?${folderId}`:wordlist}` : ""}`} replace >
                     <h2 className="section-title">Dynamic Learn</h2>
                     <div>
                         An advanced learning tool that tests you based on your past results

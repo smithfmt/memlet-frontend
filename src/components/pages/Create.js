@@ -6,6 +6,7 @@ import Header from "../parts/Header";
 import WordPair from "../parts/WordPair";
 import ErrorFlash from "../parts/ErrorFlash";
 import LanguageSelect from "../parts/LanguageSelect";
+import WordlistCard from "../parts/WordlistCard";
 import { Keyboards } from "../../keyboards";
 
 import Bin from "../../images/Icons/bin.png";
@@ -14,6 +15,10 @@ import Unprivate from "../../images/Icons/unprivate.png";
 
 const Create = (props) => {
     const type = props.match.path.split("/")[1];
+    let folderId = props.location.search.split("?")[1]||null;
+    if (folderId&&folderId.includes("F")) {
+        folderId = folderId.split("F")[0];
+    };
     let editing = type==="edit" ? true : false;
     const [wordlist, setWordlist] = useState(JSON.parse(localStorage.getItem(`${type}Wordlist`)) || {words: [], title: "New Wordlist", langs: "english-english", userId: "", toDelete: [], type, priv: true});
     const [textArea, setTextArea] = useState(false);
@@ -21,6 +26,10 @@ const Create = (props) => {
     const [focused, setFocused] = useState("");
     const [locked, setLocked] = useState(false);
     const [keyboard, setKeyboard] = useState({ lang: "english", case: "lower" })
+    const [folder, setFolder] = useState("");
+    const [otherLists, setOtherLists] = useState(null);
+    const [editMode, setEditMode] = useState(false);
+    const [included, setIncluded] = useState([]);
     const [error, setError] = useState([]);
     let errorCount = 0;
 
@@ -83,7 +92,42 @@ const Create = (props) => {
     }, [keyboard, locked, setKeyboardHidden, keyboardHidden]);
 
     useEffect(() => {
-        if (editing) {
+        if (folderId) {
+            axios.get(`${process.env.REACT_APP_API_ADDRESS}/folderById`, {
+                params: {
+                    id: parseInt(folderId),
+                },
+            })
+            .then(res => {
+                const folderData = res.data.folder;
+                folderData.wordlists.sort((a,b) => {
+                    if (a.title>b.title) return 1;
+                    if (b.title>a.title) return -1;
+                    return 0;
+                });
+                setFolder(folderData);
+            })
+            .catch((err) => {
+                if (!error.filter(e => e.msg === err.response.data.msg).length) {
+                    setError([...error, err.response.data]);
+                };
+            });
+            axios.get(`${process.env.REACT_APP_API_ADDRESS}/noFolderLists`)
+            .then(res => {
+                const folderless = res.data.wordlists;
+                folderless.sort((a,b) => {
+                    if (a.title>b.title) return 1;
+                    if (b.title>a.title) return -1;
+                    return 0;
+                });
+                setOtherLists(folderless);                
+            })
+            .catch((err) => {
+                if (!error.filter(e => e.msg === err.response.data.msg).length) {
+                    setError([...error, err.response.data]);
+                };
+            });
+        } else if (editing) {
             localStorage.removeItem(`${type}Wordlist`);
             axios.get(`${process.env.REACT_APP_API_ADDRESS}/edit`, {
                 params: {
@@ -108,7 +152,7 @@ const Create = (props) => {
                 localStorage.removeItem(`${type}Wordlist`);
             };
         };
-    }, [editing, type, error]);
+    }, [editing, type, error, folderId, setFolder]);
 
     const updateWordlistLS = (wl) => {
         localStorage.setItem(`${type}Wordlist`, JSON.stringify(wl));
@@ -311,7 +355,81 @@ const Create = (props) => {
         );
     };
     let rowNum = 0;
-    console.log(wordlist.title)
+
+    const toggleEditMode = () => {
+        setEditMode(!editMode);
+        const include = folder.wordlists.map(list => list.id);
+        setIncluded(include);
+    };
+    const updateFolder = () => {
+        axios.put(`${process.env.REACT_APP_API_ADDRESS}/updateFolder`, { idArray: included, folderId })
+        .then(res => {
+            history.push("/dashboard");
+        })
+        .catch((err) => {
+            if (!error.filter(e => e.msg === err.response.data.msg).length) {
+                setError([...error, err.response.data]);
+            };
+        });
+    };
+    const deleteFolder = () => {
+        axios.delete(`${process.env.REACT_APP_API_ADDRESS}/deleteFolder`, {
+            params: {folderId},
+        })
+        .then(res => {
+            history.push("/dashboard");
+        })
+        .catch((err) => {
+            if (!error.filter(e => e.msg === err.response.data.msg).length) {
+                setError([...error, err.response.data]);
+            };
+        });
+    };
+
+    if (folderId) {
+        if (!folder) {
+            return (
+                <div className="page-container">
+                    {error.map(err => {
+                        errorCount++;
+                        return (
+                        <ErrorFlash key={`error-${errorCount}`} errorList={error} errorNum={errorCount} setError={setError} error={err} />
+                        );
+                    })}
+                    <Header />
+                    <div>Loading...</div>
+                </div>
+            );
+        };
+        return (
+            <div className="page-container">
+                {error.map(err => {
+                    errorCount++;
+                    return (
+                    <ErrorFlash key={`error-${errorCount}`} errorList={error} errorNum={errorCount} setError={setError} error={err} />
+                    );
+                })}
+                <Header />
+                <h2 className="create-page-title">{`${!editing ? "Create" : "Edit"} ${folder.name}`}</h2>
+                <div className="view-folder-button-container">
+                    <button onClick={toggleEditMode} className={`slide-button ${editMode ? "editing" : ""}`}>{editMode ? "Editing" : "Edit"}</button>
+                    <button onClick={updateFolder} className={`slide-button ${editMode ? "" : "hidden"}`}>{`Update \xa0 (${included.length} Items)`}</button>
+                    <button className={`slide-button`} onClick={deleteFolder}><img src={Bin} alt="bin" /></button>
+                </div>
+                <div className="folder wordlist-card-container container">
+                    {folder.wordlists.map(list => {
+                        return (<WordlistCard key={list.id} id={list.id} list={list} editing={editMode ? "editing" : ""} included={included} setIncluded={setIncluded} />);
+                    })}
+                    {editMode? 
+                        otherLists.map(list => {
+                            return (<WordlistCard key={list.id} id={list.id} list={list} editing={editMode ? "editing" : ""} included={included} setIncluded={setIncluded} />);
+                        })
+                    :""}
+                </div>
+            </div>
+        );
+    };
+
     return (
         <div className="page-container">
             {error.map(err => {
@@ -388,7 +506,6 @@ const Create = (props) => {
                     
             </div>
             <div className="keyboard-key keyboard-toggle" onClick={() => setKeyboardHidden(!keyboardHidden)}>{keyboardHidden?"^":"v"}</div>
-
         </div>
     );
 };

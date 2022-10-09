@@ -9,6 +9,8 @@ import ErrorFlash from "../parts/ErrorFlash";
 const Learn = (props) => {
     let history = useHistory();
     const wordlist = props.location.pathname.split("/")[3];
+    let folderId = props.location.search.split("?")[1]||false;
+    if (folderId&&folderId.includes("F")) folderId = folderId.split("F")[0];
     const [validList, setValidList] = useState({});
     const [selectedLang, setSelectedLang] = useState("lang1")
     const [current, setCurrent] = useState(1);
@@ -32,9 +34,11 @@ const Learn = (props) => {
         axios.get(`${process.env.REACT_APP_API_ADDRESS}/${listType}`, {
             params: {
                 id: localStorage.getItem("playWordlistId"),
+                folderId,
             },
         })
         .then(res => {
+            console.log(res)
             const valid = res.data.wordlist;
             if (!valid.words) {
                 console.log("No Wordlist found!")
