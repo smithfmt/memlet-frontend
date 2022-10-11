@@ -112,7 +112,7 @@ const Explore = (props) => {
         if (prevSortBy === exploreFilters.sortBy) return;
         setPrevSortBy(exploreFilters.sortBy);
         let newLists = [];
-        const oldLists = exploreFilters.viewing==="wordlists"?[...wordlists]:[...folders];
+        const oldLists = exploreFilters.viewing==="Wordlists"?[...wordlists]:[...folders];
         switch (exploreFilters.sortBy) {
             case "Top Rated":
                 newLists = oldLists.sort((a, b) => {
@@ -130,7 +130,7 @@ const Explore = (props) => {
                 });
                 break;
             case "Alphabetical":
-                if (exploreFilters.viewing==="wordlists") {
+                if (exploreFilters.viewing==="Wordlists") {
                     newLists = oldLists.sort((a,b) => {
                         if(a.title < b.title) return -1;
                         if(a.title > b.title) return 1;
@@ -147,7 +147,7 @@ const Explore = (props) => {
             default:
                 break;
         };
-        if (exploreFilters.viewing==="wordlists") setWordlists(newLists);
+        if (exploreFilters.viewing==="Wordlists") setWordlists(newLists);
         else setFolders(newLists);
     }, [wordlists, folders, exploreFilters, prevSortBy]);
     if (exploreList.words || exploreFolder.wordlists) {
@@ -284,7 +284,7 @@ const Explore = (props) => {
     };
     let listNumber = 0;
     let langs = [];
-    if (exploreFilters.viewing==="wordlists") {wordlists.forEach(list => {
+    if (exploreFilters.viewing==="Wordlists") {wordlists.forEach(list => {
         list.langs.split("-").forEach(lang => {
             if (!langs.includes(lang)) {langs.push(lang)};
         });
