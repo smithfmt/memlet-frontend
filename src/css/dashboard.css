@@ -15,12 +15,13 @@
   
   
 .profile-form {
+  position: relative;
     display: flex;
     flex-direction: column;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     color: rgba(0, 0, 0, 0.822);
-    margin-top: 3rem;
     align-items: center;
+    margin-bottom: 3rem;
   }
   
   .profile-form input {
@@ -102,18 +103,20 @@
   
   .profile-page-container {
     width: 100%;
+    height: auto;
   }
   
   .avatar-selection {
-    position: absolute;
+    position: relative;
     justify-content: center;
     left: 0%;
     top: 10%;
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
     width: 33%;
-    margin-right: auto;
+  }
+  .avatar-selection-column {
+    width:20rem;
+    flex-wrap: wrap;
   }
   .avatar-selection h2 {
     margin-bottom: 3rem;
@@ -143,6 +146,10 @@
     font-size: 2rem;
     height: 6rem;
     width: 6rem;
+  }
+  .extra-button-column {
+    position: relative;
+    width: 33%
   }
   .dashboard-section-title {
     margin-top: 2rem;

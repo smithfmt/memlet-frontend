@@ -21,8 +21,6 @@ const View = (props) => {
     const wordlist = props.match.params.wordlist;
     const [viewList, setViewList] = useState({});
     const [folder, setFolder] = useState(false);
-    const [editing, setEditing] = useState(false);
-    const [included, setIncluded] = useState([]);
     const [userData, setUserData] = useState([]);
     const [userLabels, setUserLabels] = useState([]);
     const [error, setError] = useState([]);
@@ -208,7 +206,6 @@ const View = (props) => {
     const playButtons = ["learn", "flashcards", "dynamic"];
     let id = viewList.id;
     let navName = wordlist;
-    let wordlists;
     if (folder) {
         id = folder.id;
         navName = folder.name;
@@ -236,10 +233,11 @@ const View = (props) => {
                 <h2 className="edit section-title"><Link className="container" to={`/edit/${navName}${folder?`?${id}F`:""}`} replace onClick={() => {localStorage.setItem(`editWordlistId`, id)}} >Edit</Link></h2>
                     {folder? <>
                         <div className="folder wordlist-card-container container">
-                            {(expand? folder.wordlists:folder.wordlists.slice(0,8)).map(list => {
+                            {(expand? folder.wordlists:folder.wordlists.slice(0,5)).map(list => {
                                 return (<WordlistCard key={list.id} id={list.id} list={list} />);
                             })}
                         </div>
+                        {folder.wordlists.length>5 ? (<button className="slide-button expand" onClick={() => setExpand(!expand)}>{!expand ? "v" : "^"}</button>) : ""}
                     </>
                         : <>
                         

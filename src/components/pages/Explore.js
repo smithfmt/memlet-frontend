@@ -112,7 +112,7 @@ const Explore = (props) => {
         if (prevSortBy === exploreFilters.sortBy) return;
         setPrevSortBy(exploreFilters.sortBy);
         let newLists = [];
-        const oldLists = [...wordlists];
+        const oldLists = exploreFilters.viewing==="wordlists"?[...wordlists]:[...folders];
         switch (exploreFilters.sortBy) {
             case "Top Rated":
                 newLists = oldLists.sort((a, b) => {
@@ -130,19 +130,27 @@ const Explore = (props) => {
                 });
                 break;
             case "Alphabetical":
-                newLists = oldLists.sort((a,b) => {
-                    if(a.title < b.title) return -1;
-                    if(a.title > b.title) return 1;
-                    return 0;
-                });
+                if (exploreFilters.viewing==="wordlists") {
+                    newLists = oldLists.sort((a,b) => {
+                        if(a.title < b.title) return -1;
+                        if(a.title > b.title) return 1;
+                        return 0;
+                    });
+                } else {
+                    newLists = oldLists.sort((a,b) => {
+                        if(a.name < b.name) return -1;
+                        if(a.name > b.name) return 1;
+                        return 0;
+                    });
+                };
                 break;
             default:
                 break;
         };
-        setWordlists(newLists);
-    }, [wordlists, exploreFilters, prevSortBy]);
+        if (exploreFilters.viewing==="wordlists") setWordlists(newLists);
+        else setFolders(newLists);
+    }, [wordlists, folders, exploreFilters, prevSortBy]);
     if (exploreList.words || exploreFolder.wordlists) {
-        console.log(exploreFolder.wordlists)
         let wordpairIndex = -1;
         if (exploreFolder.wordlists) {
             return (<div className="page-container">
@@ -165,7 +173,7 @@ const Explore = (props) => {
                     Save
                     </Link>
                 </button>
-                    <h2>{exploreFolder.name}</h2>
+                    <h2 className="explore-list-title">{exploreFolder.name}</h2>
                     <button className="upvote-button slide-button process-button" onClick={() => {
                         const newExploreFolder = {...exploreFolder};
                         if (newExploreFolder.upvoted.includes(currentUser)) {
@@ -222,7 +230,7 @@ const Explore = (props) => {
                     Copy
                     </Link>
                 </button>
-                    <h2>{exploreList.title}</h2>
+                    <h2 className="explore-list-title">{exploreList.title}</h2>
                     <button className="upvote-button slide-button process-button" onClick={() => {
                         const newExploreList = {...exploreList};
                         if (newExploreList.upvoted.includes(currentUser)) {
@@ -276,11 +284,11 @@ const Explore = (props) => {
     };
     let listNumber = 0;
     let langs = [];
-    wordlists.forEach(list => {
+    if (exploreFilters.viewing==="wordlists") {wordlists.forEach(list => {
         list.langs.split("-").forEach(lang => {
             if (!langs.includes(lang)) {langs.push(lang)};
         });
-    });
+    })};
 
     return (
         <div className="page-container">
@@ -341,7 +349,7 @@ const Explore = (props) => {
                     if ((listNumber<9 || exploreFilters.viewAll) && listNumber<100) {
                         listNumber++;
                         return (
-                            <Link to={`/explore/${list.reference}`} onClick={() => localStorage.setItem("exploreListId", list.id)} key={`exploreList-${list.id}`}>
+                            <Link className="explore-card-container" to={`/explore/${list.reference}`} onClick={() => localStorage.setItem("exploreListId", list.id)} key={`exploreList-${list.id}`}>
                                 <button className="explore-card">
                                     <div className="container explore-card-title">
                                         <h2>{list.title}</h2>
@@ -361,7 +369,7 @@ const Explore = (props) => {
                         if ((listNumber<9 || exploreFilters.viewAll) && listNumber<100) {
                             listNumber++;
                             return (
-                                <Link to={`/explore/${folder.name}?${folder.id}F`} onClick={() => localStorage.setItem("exploreListId", folder.id)} key={`exploreList-${folder.id}`}>
+                                <Link className="explore-card-container" to={`/explore/${folder.name}?${folder.id}F`} onClick={() => localStorage.setItem("exploreListId", folder.id)} key={`exploreList-${folder.id}`}>
                                     <button className="explore-card">
                                         <div className="container explore-card-title">
                                             <h2>{folder.name}</h2>

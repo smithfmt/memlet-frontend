@@ -10,6 +10,7 @@
     position: relative;
     border-bottom: white 10px solid;
     text-align: center;
+    width: 33%
   }
   .play-page.section:hover {
     border-bottom: rgb(211, 92, 92) 10px solid;

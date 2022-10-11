@@ -83,6 +83,12 @@ const Profile = () => {
         </div> 
         );
     };
+
+    const deleteStats = async () => {
+        await axios.delete(`${process.env.REACT_APP_API_ADDRESS}/stats`);
+        history.push("/dashboard");
+    };
+
     return (
         <div className="page-container">
             {error.map(err => {
@@ -94,8 +100,9 @@ const Profile = () => {
             <Header />
             <h2 className="page-title">{user.name!=="NA" ? user.name : user.username}'s Profile</h2>
             <div className="profile-page-container container">
-                <div className="avatar-selection">
+                <div className="avatar-selection column">
                     <h2 className="page-title">Select Your Avatar</h2>
+                    <div className="container avatar-selection-column">
                     {Object.keys(avatars).map(avatar => {
                         return (
                             <button key={avatar} onClick={() => setSelected(avatar.split(".")[0])} className={`avatar-select ${avatar.split(".")[0]===selected ? "selected" : ""}`}>
@@ -103,6 +110,8 @@ const Profile = () => {
                             </button>
                         )
                     })}
+                    </div>
+                    
                     <button onClick={() => setSelected("none")} className={`avatar-select ${selected==="none" ? "selected" : ""}`}>
                         <div className="avatar">x</div>
                     </button>
@@ -123,10 +132,13 @@ const Profile = () => {
                     <label>Confirm New Password</label>
                     <input type="password" ref={confirmedNewPasswordRef} name="new-password-confirm" placeholder="Confirm New Password" />
                     <div className="container">
-                        <button className="slide-button profile-button" type="submit">Update Profile →</button>
-                        <button className="slide-button profile-button" ><Link className="profile-button-link" to="/dashboard" onClick={() => logout()} >Logout →</Link></button>
+                        <button className="slide-button profile-button profile-button-link" type="submit">Update Profile →</button>
+                        <button className="slide-button profile-button profile-button-link" ><Link to="/dashboard" onClick={() => logout()} >Logout →</Link></button>
                     </div>
                 </form>
+                <div className="extra-button-column column">
+                <button className="slide-button profile-button profile-button-link" onClick={deleteStats}>- Delete Stats -</button>
+                </div>
             </div>
         </div>
     );

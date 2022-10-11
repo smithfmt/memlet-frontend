@@ -266,7 +266,7 @@ const Create = (props) => {
             } else return undefined;
         }).filter(item => {return item})
         setTextArea(false);
-        setWordlist({words: textList, title: titleRef.current.value, langs: wordlist.langs, userId: wordlist.userId, toDelete: wordlist.toDelete, type})
+        setWordlist({words: textList, title: titleRef.current.value, langs: wordlist.langs, userId: wordlist.userId, toDelete: wordlist.toDelete, type, priv: wordlist.priv})
     };
  
     const pressKey = (e, key) => {
