@@ -48,8 +48,8 @@ export const shuffle = (array) => {
     let last = true;
     let offset = false;
     let wrong = 0;
-    let test = str1.toLowerCase();
-    let answer = str2.toLowerCase();
+    let test = str1.toLowerCase().trim();
+    let answer = str2.toLowerCase().trim();
     if (answer.match(/\(.*?\)/)) {
         if (!test.match(/\(.*?\)/)) {
             answer = answer.split(/\(.*?\)/)[0].trim();

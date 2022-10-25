@@ -17,20 +17,27 @@ const Learn = (props) => {
     const [shuffledList, setShuffledList] = useState([]);
     const [score, setScore] = useState(0);
     const [dynamic, setDynamic] = useState(false);
+    const [study, setStudy] = useState(false);
     const [learnEverything, setLearnEverything] = useState(false);
     const [error, setError] = useState([]);
     const [showResults, setShowResults] = useState(false);
     const [strict, setStrict] = useState(localStorage.getItem("strictmode")?localStorage.getItem("strictmode"):false);
     let errorCount = 0;
     if (props.match.path.split("/")[2]==="dynamic" && !dynamic) {setDynamic(true)}
+    if (props.match.path.split("/")[2]==="study" && !study) {setStudy(true)};
     if (!wordlist && !learnEverything) {setLearnEverything(true)};
-
+    console.log(study)
     useEffect(() => {
         let listType = "play";
         if (dynamic) {
             listType="dynamic"
             if (learnEverything) listType="everything-dynamic";
-        } else if (learnEverything) listType="everything";
+        } else if (learnEverything) {
+            listType="everything";
+        } else if (study) {
+            listType = "study";
+        };
+        console.log(listType)
         axios.get(`${process.env.REACT_APP_API_ADDRESS}/${listType}`, {
             params: {
                 id: localStorage.getItem("playWordlistId"),
@@ -98,6 +105,7 @@ const Learn = (props) => {
     let title = "Learn";
     if (dynamic) title="Dynamic";
     if (learnEverything) title="Everything";
+    if (study) title="Study";
 
     let [lang1, lang2] = validList.langs.split("-");
     if (shuffledList.length&&shuffledList[current-1]) {
@@ -132,6 +140,11 @@ const Learn = (props) => {
                     </div>
                     <h2>{`${current-1}/${shuffledList.length}`}</h2>
                 </div>
+                {study?
+                    !shuffledList.length?
+                        <div>You have learnt all these words!</div>
+                    :""
+                :""}
                 {shuffledList.map((wordpair) => {
                     const thisId = cardId;
                     cardId++;

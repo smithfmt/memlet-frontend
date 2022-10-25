@@ -203,7 +203,7 @@ const View = (props) => {
         </div>);
     };
     let wordpairIndex = -1;
-    const playButtons = ["learn", "flashcards", "dynamic"];
+    const playButtons = ["learn", "flashcards", "dynamic", "study"];
     let id = viewList.id;
     let navName = wordlist;
     if (folder) {

@@ -37,6 +37,7 @@ const App = () => {
             <Route path="/play/flashcards" component={Flashcards} />
             <Route path="/play/learn" component={Learn} />
             <Route path="/play/dynamic" component={Learn} />
+            <Route path="/play/study" component={Learn} />
             <Route exact path="/edit/:wordlist" component={Create} />
             <Route exact path="/play/:wordlist" component={Play} />
             <Route exact path="/view/:wordlist" component={View} />

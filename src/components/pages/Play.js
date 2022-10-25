@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import Learn from "../../images/Play/learn.png";
 import Dynamic from "../../images/Play/dynamic.png";
 import Flashcards from "../../images/Play/flashcards.png";
+import Study from "../../images/Play/study.png";
 
 const Play = (props) => {
     const wordlist = props.match.params.wordlist || "";
@@ -52,6 +53,17 @@ const Play = (props) => {
                     </div>
                     <div className="img-container">
                         <img alt="dynamic" src={Dynamic} />
+                    </div>
+                </Link>
+                </div>
+                <div className="play-page section">
+                <Link className="column" to={`/play/study${wordlist ? `/${type==="folder"?wordlist+`?${folderId}`:wordlist}` : ""}`} replace >
+                    <h2 className="section-title">Study</h2>
+                    <div>
+                        Learn only words you have got wrong or not learned before
+                    </div>
+                    <div className="img-container">
+                        <img alt="study-icon" src={Study} />
                     </div>
                 </Link>
                 </div>
