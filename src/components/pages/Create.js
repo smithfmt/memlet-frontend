@@ -205,6 +205,7 @@ const Create = (props) => {
     };   
 
     const updateWordpair = (index, value, type) => {
+        console.log("updating", index, value, type)
         const oldWordlist = {...wordlist};
         if (!value) value = type;
         oldWordlist.words[index][type] = value;
@@ -266,11 +267,12 @@ const Create = (props) => {
             } else return undefined;
         }).filter(item => {return item})
         setTextArea(false);
-        setWordlist({words: textList, title: titleRef.current.value, langs: wordlist.langs, userId: wordlist.userId, toDelete: wordlist.toDelete, type, priv: wordlist.priv})
+        setWordlist({words: textList, title: titleRef.current.value, langs: wordlist.langs, userId: wordlist.userId, toDelete: wordlist.toDelete, type, priv: wordlist.priv});
     };
  
     const pressKey = (e, key) => {
         e.preventDefault();
+        console.log(focused)
         switch (key) {
             case "lock":
                 return setLocked(!locked);
@@ -287,6 +289,7 @@ const Create = (props) => {
                 } else newKeybrd.case = "special";
                 return setKeyboard(newKeybrd);
             case "del":
+
                 switch (focused) {
                     case "word":
                         wordRef.current.value = wordRef.current.value.slice(0,-1);
@@ -294,10 +297,20 @@ const Create = (props) => {
                     case "translation":
                         translationRef.current.value = translationRef.current.value.slice(0,-1);
                         break;
-                    default: break;
+                    default: 
+                        const currentValue = document.getElementById(focused).value;
+                        const index = parseInt(focused.split("-")[2]);
+                        const type = focused.split("-")[1];
+                        updateWordpair(index, currentValue.slice(0,-1), type);
+                        break;
                 };
                 return;
-            default: break;
+            default: 
+                const currentValue = document.getElementById(focused).value;
+                const index = parseInt(focused.split("-")[2]);
+                const type = focused.split("-")[1];
+                updateWordpair(index, `${currentValue}${key}`, type);
+                break;
         };
         switch (focused) {
             case "word":
@@ -316,7 +329,7 @@ const Create = (props) => {
         setFocused(input);
         if (!locked&&input) {
             let newKeyboard = {...keyboard};
-            if (input==="word") {
+            if (input==="word" || (input.split("-").length && input.split("-")[1]==="word")) {
                 let newLang = wordlist.langs.split("-")[0];
                 if (!validLangs.includes(newLang)) newLang = "english";
                 newKeyboard.lang = newLang;
@@ -469,6 +482,7 @@ const Create = (props) => {
                             wordpair={wordpair} 
                             deleteWordpair={deleteWordpair} 
                             updateWordpair={updateWordpair} 
+                            focusInput={focusInput}
                             index={wordpairIndex} 
                         />);
                     })}

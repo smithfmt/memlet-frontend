@@ -124,8 +124,8 @@ const Stats = (props) => {
                 <Line
                 data={data}
                 options={options}
-                height={350}
-                width={800}
+                height={750}
+                width={1700}
                 />
             </div>
             <div className="answers-container">
