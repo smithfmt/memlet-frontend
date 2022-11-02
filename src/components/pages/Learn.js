@@ -52,7 +52,7 @@ const Learn = (props) => {
                 history.push("/dashboard")
             } else {
                 setValidList(valid);
-                if (!dynamic) {setShuffledList(shuffle(valid.words))}
+                if (!dynamic&&!study) {setShuffledList(shuffle(valid.words))}
                 else {setShuffledList(valid.words)};              
             };
         })
