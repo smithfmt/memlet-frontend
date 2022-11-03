@@ -70,6 +70,7 @@ export const shuffle = (array) => {
     let wordType = "unknown";
     switch (langs[langs.selectedLang]) {
         case "greek" :
+            // Prose comp
             if (langs.lang1==="greek") {
                 if (splitTest.length===1 && splitAnswer.includes(splitTest[0])) {
                     answer = splitTest[0];
@@ -127,6 +128,7 @@ export const shuffle = (array) => {
             };
             break;
         case "latin":
+            // Prose comp
             if (langs.lang1==="latin") {
                 if (splitTest.length===1 && splitAnswer.includes(splitTest[0])) {
                     answer = splitTest[0];
