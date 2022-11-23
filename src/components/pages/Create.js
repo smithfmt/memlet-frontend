@@ -22,7 +22,7 @@ const Create = (props) => {
     let editing = type==="edit" ? true : false;
     const [wordlist, setWordlist] = useState(JSON.parse(localStorage.getItem(`${type}Wordlist`)) || {words: [], title: "New Wordlist", langs: "english-english", userId: "", toDelete: [], type, priv: true});
     const [textArea, setTextArea] = useState(false);
-    const [keyboardHidden, setKeyboardHidden] = useState(false);
+    const [keyboardHidden, setKeyboardHidden] = useState(true);
     const [focused, setFocused] = useState("");
     const [locked, setLocked] = useState(false);
     const [keyboard, setKeyboard] = useState({ lang: "english", case: "lower" })
@@ -473,7 +473,7 @@ const Create = (props) => {
                     <button className="slide-button" onClick={() => setTextArea(!textArea)}>{textArea ? "Back to cards →" : "Create from text →"}</button>
                 </div>
                 </>) : ( 
-                <div className="list-container">
+                <div className="list-container creates">
                     {wordlist.words.map(wordpair => {
                         wordpairIndex++;
                         return(
@@ -486,7 +486,7 @@ const Create = (props) => {
                             index={wordpairIndex} 
                         />);
                     })}
-                    <form autoComplete="off" spellCheck="false" className="word-pair-container" onSubmit={addWord}>
+                    <form autoComplete="off" spellCheck="false" className="word-pair-container last" onSubmit={addWord}>
                         <input id="add-word" type="text" ref={wordRef} name="word" required placeholder="Word" onFocus={() => focusInput("word")} onBlur={() => focusInput("")}/>
                         <button className="add-word-button" type="submit">+</button>
                         <input id="add-translation" type="text" ref={translationRef} name="translation" required placeholder="Translation" onFocus={() => focusInput("translation")} onBlur={() => focusInput("")}/>
@@ -519,7 +519,7 @@ const Create = (props) => {
                     </div>
                     
             </div>
-            <div className="keyboard-key keyboard-toggle" onClick={() => setKeyboardHidden(!keyboardHidden)}>{keyboardHidden?"^":"v"}</div>
+            <div className="keyboard-key keyboard-toggle" onClick={() => setKeyboardHidden(!keyboardHidden)}>{keyboardHidden?"^ Show Keyboard ^":"v Hide Keyboard v"}</div>
         </div>
     );
 };
