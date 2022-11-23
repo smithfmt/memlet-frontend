@@ -50,6 +50,7 @@ const View = (props) => {
                         answerArray.push(answer);
                     });
                 });
+                answerArray = answerArray.length>100?answerArray.slice(answerArray.length-100,answerArray.length):answerArray;
                 let dataArray = [];
                 let labelArray = [];
                 answerArray.sort((prev, next) => {return prev.id - next.id}).forEach(answer => {

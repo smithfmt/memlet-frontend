@@ -43,7 +43,7 @@ const Dashboard = () => {
                     setLoggedOut(true);
                 };
             });
-            axios.get(`${process.env.REACT_APP_API_ADDRESS}/all-stats`)
+            axios.get(`${process.env.REACT_APP_API_ADDRESS}/graph-all-stats`)
             .then(res => {
                 const {wordlistItems, answers} = res.data;
                 setStats({wordlistItems, answers});
