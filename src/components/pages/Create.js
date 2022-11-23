@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import axios from "axios";
+import $ from "jquery";
 
 import Header from "../parts/Header";
 import WordPair from "../parts/WordPair";
@@ -166,6 +167,9 @@ const Create = (props) => {
         setWordlist(oldWordlist);
         updateWordlistLS(oldWordlist);
         e.target.reset();
+        $('html, body').stop().animate({
+            scrollTop: $("#add-word").offset().top
+        }, 300)
     };
     const publishWordlist = () => {
         if (editing) {
