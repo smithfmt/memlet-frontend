@@ -65,8 +65,8 @@ export const shuffle = (array) => {
         splitAccent.shift();
         greekAccents[accent[0]] = splitAccent.join();
     });
-    const splitAnswer = answer.split(", ");
-    const splitTest = test.split(", ");
+    const splitAnswer = answer.split(/[;,]/).map(i => {return i.trim()});
+    const splitTest = test.split(/[;,]/).map(i => {return i.trim()});
     let wordType = "unknown";
     switch (langs[langs.selectedLang]) {
         case "greek" :
