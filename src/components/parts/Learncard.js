@@ -4,7 +4,7 @@ import { compare, capitalize } from "../../helpers";
 
 const Learncard = (props) => {
     const answerRef = React.createRef();
-    const { strict, id, current, wordpair, selectedLang, changeCard, error, setError, langs } = props;
+    const { strict, id, current, wordpair, selectedLang, changeCard, error, setError, langs, userId } = props;
 
     const [answered, setAnswered] = useState(false);
     const [corrPercent, setCorrPercent] = useState(100);
@@ -88,6 +88,23 @@ const Learncard = (props) => {
         });
     };
 
+    const learntThis = () => {
+        axios.put(`${process.env.REACT_APP_API_ADDRESS}/learnt`, {
+            id: wordpair.id,
+            userId,
+            learnt: true,
+        })
+        .then(res => {
+            console.log(res)
+            nextCard();
+        })
+        .catch(err => {
+            if (!error.filter(e => e.msg === err.response.data.msg).length) {
+                setError([...error, err.response.data]);
+            };
+        });
+    };
+
     if (answered) {
         let answerMessage = "correct";
         if (corrPercent<100) {answerMessage = "almost"};
@@ -116,6 +133,7 @@ const Learncard = (props) => {
                 <button className="slide-button" type="submit">→</button>
                 </form>
             </div>
+            <button className="learnt-button slide-button" onClick={learntThis}>I have learnt this</button>
         </div>
         
     );

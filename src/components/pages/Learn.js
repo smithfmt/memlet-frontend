@@ -26,7 +26,6 @@ const Learn = (props) => {
     if (props.match.path.split("/")[2]==="dynamic" && !dynamic) {setDynamic(true)}
     if (props.match.path.split("/")[2]==="study" && !study) {setStudy(true)};
     if (!wordlist && !learnEverything) {setLearnEverything(true)};
-    console.log(study)
     useEffect(() => {
         let listType = "play";
         if (dynamic) {
@@ -149,7 +148,7 @@ const Learn = (props) => {
                     const thisId = cardId;
                     cardId++;
                     return (
-                        <Learncard error={error} strict={strict} setError={setError} key={thisId} id={thisId} wordpair={wordpair} langs={{lang1:lang2, lang2:lang1, selectedLang}} selectedLang={selectedLang} current={current} changeCard={changeCard} />
+                        <Learncard error={error} userId={validList.userId?validList.userId:0} strict={strict} setError={setError} key={thisId} id={thisId} wordpair={wordpair} langs={{lang1:lang2, lang2:lang1, selectedLang}} selectedLang={selectedLang} current={current} changeCard={changeCard} />
                     );
                 })}  
             </div>

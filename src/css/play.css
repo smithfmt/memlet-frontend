@@ -363,3 +363,8 @@
   .strict-accents-container div {
     margin-right: 0.5rem;
   }
+
+  .learnt-button {
+    margin-top: 1rem;
+    margin-left: 1rem;
+  }

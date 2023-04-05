@@ -403,6 +403,25 @@ const Create = (props) => {
         });
     };
 
+    const learntThis = (id, learnt, index) => {
+        
+        axios.put(`${process.env.REACT_APP_API_ADDRESS}/learnt`, {
+            id,
+            userId: wordlist.userId,
+            learnt,
+        })
+        .then(res => {
+            const newList = {...wordlist};
+            newList.words[index].learnt=learnt;
+            setWordlist(newList);
+        })
+        .catch(err => {
+            if (!error.filter(e => e.msg === err.response.data.msg).length) {
+                setError([...error, err.response.data]);
+            };
+        });
+    };
+
     if (folderId) {
         if (!folder) {
             return (
@@ -488,6 +507,7 @@ const Create = (props) => {
                             updateWordpair={updateWordpair} 
                             focusInput={focusInput}
                             index={wordpairIndex} 
+                            learntThis={learntThis}
                         />);
                     })}
                     <form autoComplete="off" spellCheck="false" className="word-pair-container last" onSubmit={addWord}>
