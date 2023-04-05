@@ -114,6 +114,7 @@
   .word-pair-container {
     display: flex;
     align-items: center;
+    margin-left: 1rem;
   }
   
   @keyframes slideOut {

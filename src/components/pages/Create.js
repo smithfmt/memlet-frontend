@@ -510,7 +510,7 @@ const Create = (props) => {
                             learntThis={learntThis}
                         />);
                     })}
-                    <form autoComplete="off" spellCheck="false" className="word-pair-container last" onSubmit={addWord}>
+                    <form style={{marginRight:"1rem"}}autoComplete="off" spellCheck="false" className="word-pair-container last" onSubmit={addWord}>
                         <input id="add-word" type="text" ref={wordRef} name="word" required placeholder="Word" onFocus={() => focusInput("word")} onBlur={() => focusInput("")}/>
                         <button className="add-word-button" type="submit">+</button>
                         <input id="add-translation" type="text" ref={translationRef} name="translation" required placeholder="Translation" onFocus={() => focusInput("translation")} onBlur={() => focusInput("")}/>
