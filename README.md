@@ -1,4 +1,4 @@
-# The Frontend for my Vocabulary learning platform "Memlet"
+# The Frontend for my Vocabulary Learning Platform "Memlet"
 
 A React Web App connected to an Express API. 
 
